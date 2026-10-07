@@ -15,8 +15,8 @@
 <meta property="og:image" content="https://tirez.ae/img/og.png">
 <meta property="og:url" content="https://tirez.ae/">
 <meta name="theme-color" content="#0B0E12">
-<link rel="icon" href="../img/favicon.png" sizes="any">
-<link rel="apple-touch-icon" href="../img/favicon.png">
+<link rel="icon" href="../img/favicon.png?v=2" sizes="any">
+<link rel="apple-touch-icon" href="../img/favicon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -84,12 +84,14 @@ section{padding-block:clamp(64px,9vw,136px)}
 @media(max-width:479px){.btn{width:100%;min-height:52px}}
 
 /* ============ HEADER ============ */
-.hdr{position:fixed;inset:0 0 auto 0;z-index:50;height:68px;display:flex;align-items:center;
+.hdr{position:fixed;inset:0 0 auto 0;z-index:50;height:78px;display:flex;align-items:center;
   transition:background .25s,border-color .25s;border-bottom:1px solid transparent}
 .hdr.stuck{background:rgba(11,14,18,.92);border-bottom-color:var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .hdr .wrap{display:flex;align-items:center;gap:24px;width:100%}
 .brand{flex-shrink:0;display:flex;align-items:center;border:0}
-.brand img{height:38px;width:auto}
+/* Лок-ап растянут 2.6:1 — на телефоне на той же высоте «WHEEL ZONE» становится нечитаемым.
+   Поэтому до 767px отдаём только круглую эмблему, через <picture> грузится ровно один файл. */
+.brand img{height:54px;width:auto}
 .nav{margin-left:auto;display:flex;gap:28px;align-items:center}
 .nav a{position:relative;border:0;color:var(--muted);font-size:var(--fs-small);text-transform:uppercase;
   letter-spacing:.14em;font-weight:600;padding-block:6px}
@@ -102,8 +104,9 @@ section{padding-block:clamp(64px,9vw,136px)}
 .burger span{display:block;width:18px;height:2px;background:var(--text);position:relative}
 .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:var(--text)}
 .burger span::before{top:-6px} .burger span::after{top:6px}
+@media(max-width:767px){.hdr{height:68px}.brand img{height:50px}}
 @media(max-width:1023px){
-  .nav{position:fixed;inset:68px 0 auto 0;flex-direction:column;gap:0;background:var(--ink-2);
+  .nav{position:fixed;inset:78px 0 auto 0;flex-direction:column;gap:0;background:var(--ink-2);
     border-bottom:1px solid var(--line);padding:8px var(--pad) 24px;display:none}
   .nav.open{display:flex}
   .nav a{width:100%;padding:16px 0;border-bottom:1px solid var(--line);font-size:16px}
@@ -111,6 +114,9 @@ section{padding-block:clamp(64px,9vw,136px)}
   .hdr>.wrap>.btn{display:none}
   .burger{display:flex}
 }
+/* Строго ПОСЛЕ блока 1023px: там у .nav стоит shorthand inset, который иначе
+   затирает верхнюю отбивку, и меню на телефоне отрывается от шапки на 10px */
+@media(max-width:767px){.nav{top:68px}}
 
 /* ============ HERO — вариант A, ворота размера ============ */
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;padding-block:120px 72px;overflow:hidden}
@@ -123,7 +129,10 @@ section{padding-block:clamp(64px,9vw,136px)}
   background:radial-gradient(520px at var(--mx,50%) var(--my,40%),rgba(5,124,188,.22),transparent 70%)}
 .hero .wrap{position:relative;z-index:2;width:100%}
 .hero-kicker{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}
-.hero-kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-lit);flex:none}
+/* точка должна висеть у ПЕРВОЙ строки: на телефоне адрес переносится,
+   и при align-items:center она уезжает в вертикальный центр двух строк */
+.hero-kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-lit);
+  flex:none;align-self:flex-start;margin-top:.48em}
 .hero h1{font-size:var(--fs-h1);max-width:16ch;margin-bottom:16px}
 .hero .lead{margin-bottom:40px}
 .gate{display:flex;align-items:flex-end;gap:clamp(6px,1.6vw,22px);flex-wrap:nowrap}
@@ -353,7 +362,7 @@ section{padding-block:clamp(64px,9vw,136px)}
 /* ============ FOOTER + MOBILE BAR ============ */
 .ftr{background:var(--ink);border-top:1px solid var(--line);padding-block:48px 120px}
 .ftr .wrap{display:flex;gap:28px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
-.ftr img{height:42px;width:auto}
+.ftr img{height:62px;width:auto}
 .ftr .ar{font-family:"Cairo","Archivo",sans-serif;color:var(--muted);font-size:var(--fs-small);direction:rtl}
 .ftr small{color:var(--dim);font-size:13px;display:block;margin-top:14px;max-width:46ch;line-height:1.6}
 @media(min-width:768px){.ftr{padding-bottom:48px}}
@@ -381,8 +390,11 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .hero-photo::after{background:linear-gradient(270deg,var(--ink) 0%,rgba(11,14,18,.95) 42%,rgba(11,14,18,.72) 100%),
   linear-gradient(0deg,var(--ink) 0%,rgba(11,14,18,.35) 34%,transparent 62%)}
 .hero-wheel{right:auto;left:-8vw}
+/* .gate внутри direction:ltr — там flex-end это право.
+   .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
+   уезжали на светлую половину фото и переставали читаться. Нужен flex-start. */
 .gate{direction:ltr;justify-content:flex-end}
-.gate-out,.hero-cta{justify-content:flex-end}
+.gate-out,.hero-cta{justify-content:flex-start}
 .gate-f .label{direction:rtl}
 .skip:focus{left:auto;right:var(--pad)}
 .alts li em,.trow .mi{direction:rtl}
@@ -397,7 +409,10 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 <header class="hdr" id="hdr">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="ويل زون لتجارة الاطارات — الرئيسية">
-      <img src="../img/logo.webp?v=1" alt="شعار ويل زون لتجارة الاطارات" width="98" height="38">
+      <picture>
+        <source media="(max-width:767px)" srcset="../img/logo-mark.webp?v=2" width="150" height="150">
+        <img src="../img/logo.webp?v=2" alt="شعار ويل زون لتجارة الاطارات" width="417" height="160" fetchpriority="high">
+      </picture>
     </a>
     <nav class="nav" id="nav">
       <a href="#rims">الجنوط</a>
@@ -504,7 +519,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
         <p class="label" data-rv>02 — ما لا يفعله الجيران</p>
         <h2 data-rv style="margin:12px 0 24px">نُصلح الجنط.<br>لا نبيعك جنطاً جديداً وحسب.</h2>
         <blockquote class="quote" data-rv>“Just visited this newly opened tire and rim repair shop and was really impressed! The staff were friendly, professional, and knew exactly what they were doing. They took the time to explain the issues with my wheels and offered fair prices”
-          <cite>فهيد · مرشد محلي، 330 تقييماً · جوجل</cite></blockquote>
+          <cite>Vahid · مرشد محلي، 330 تقييماً · جوجل</cite></blockquote>
         <ul class="list" data-rv>
           <li><span class="mono">01</span><span>تدخل بسيارتك، وننظر إلى العجلة معك.</span></li>
           <li><span class="mono">02</span><span>نخبرك بما فيها فعلاً من عيب قبل أن نذكر أي سعر.</span></li>
@@ -546,10 +561,10 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 
     <div class="filters" id="tyreFilters" role="group" aria-label="ترشيح الإطارات">
       <button class="chip" aria-pressed="true" data-u="all">الكل</button>
-      <button class="chip" aria-pressed="false" data-u="Passenger">صالون</button>
+      <button class="chip" aria-pressed="false" data-u="Passenger">ركاب</button>
       <button class="chip" aria-pressed="false" data-u="SUV">دفع رباعي</button>
       <button class="chip" aria-pressed="false" data-u="Performance">أداء عالٍ</button>
-      <button class="chip" aria-pressed="false" data-u="4x4">4&times;4</button>
+      <button class="chip" aria-pressed="false" data-u="4x4">طرق وعرة</button>
     </div>
 
     <div class="tgrid" id="tyreGrid"></div>
@@ -562,7 +577,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     <p class="label" data-rv>04 — بعد أن تغادر</p>
     <h2 data-rv style="margin:12px 0 28px;max-width:18ch">ضمان على القطعة <em style="font-style:normal;color:var(--accent-lit)">و</em> على العمل</h2>
     <blockquote class="quote" data-rv style="max-width:74ch;margin-bottom:40px">“Best tire shop in town! They&rsquo;ve got the best prices, top-quality tires, and excellent service. You get a warranty on both the tires and the work, so you know you&rsquo;re in good hands. And the selection of rims? Crazy good – whatever style you&rsquo;re thinking of, they&rsquo;ve got it. Highly recommended”
-      <cite>محمد العلوي · جوجل</cite></blockquote>
+      <cite>Mohammad Alalawi · جوجل</cite></blockquote>
     <div class="cols3" data-rv>
       <div><span class="mono">01</span><h3>على المنتج</h3><p>كل ما تشتريه من هنا مشمول. اسألنا عن الشروط الدقيقة للقطعة التي تنظر إليها — نفضّل أن نخبرك بدل أن نطبع وعداً غامضاً.</p></div>
       <div><span class="mono">02</span><h3>على جودة العمل</h3><p>إذا لم يكن ما ركّبناه سليماً، أعِده إلينا ونتكفّل به. هذا هو النصف الذي تتجاهله معظم المحلات.</p></div>
@@ -611,10 +626,10 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
         <div class="field">
           <label class="label" for="qItem">ما الذي تبحث عنه</label>
           <select id="qItem">
-            <option value="إطارات">الإطارات</option>
-            <option value="جنوط">الجنوط</option>
+            <option value="إطارات">إطارات</option>
+            <option value="جنوط">جنوط</option>
             <option value="جنوط + إطارات">جنوط + إطارات</option>
-            <option value="إصلاح جنط">إصلاح الجنوط</option>
+            <option value="إصلاح جنط">إصلاح جنط</option>
           </select>
         </div>
         <div class="field">
@@ -704,7 +719,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 <footer class="ftr">
   <div class="wrap">
     <div>
-      <img src="../img/logo.webp?v=1" alt="Wheel Zone Tyre Trading" width="108" height="42" loading="lazy">
+      <img src="../img/logo.webp?v=2" alt="Wheel Zone Tyre Trading" width="417" height="160" loading="lazy">
       <p class="ar" style="margin-top:12px">ویل زون لتجارة الاطارات</p>
       <small>WHEEL ZONE TYRE TRADING (4X_WHEELS) · 36TH STREET - Ras Al Khor - Ras Al Khor Industrial Area 2 - Dubai</small>
     </div>
@@ -729,7 +744,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
   "name":"WHEEL ZONE TYRE TRADING",
   "alternateName":["4X_WHEELS","ویل زون لتجارة الاطارات"],
   "url":"https://tirez.ae/ar/",
-  "image":"https://tirez.ae/img/logo.png",
+  "image":"https://tirez.ae/img/og.png",
   "telephone":"+97145762199",
   "address":{
     "@type":"PostalAddress",
@@ -751,6 +766,21 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 var PHONE = "+97145762199", PHONE_H = "04 576 2199";
 var DATA = null;
+
+/* Словарь терминов каталога. В английской версии пустой — L() возвращает как есть.
+   В /ar/ его подставляет build_ar.py: стиль диска, тип шины и названия услуг приходят
+   из catalog.json по-английски, и переводить их надо на отрисовке, а не заменой строк. */
+var TERMS = {"Split-spoke": "قضبان مزدوجة", "Mesh": "شبكي", "Multi-spoke": "متعدد القضبان", "Wire / fine spoke": "قضبان رفيعة", "Twin-spoke": "قضبان ثنائية", "Gloss black / red line": "أسود لامع / خط أحمر", "Bronze": "برونزي", "Hyper silver": "فضي هايبر", "Polished chrome": "كروم مصقول", "Polished face": "واجهة مصقولة", "Satin black": "أسود ساتان", "Machined silver": "فضي مخرّط", "Matte bronze": "برونزي مطفي", "finish": "التشطيب", "width": "العرض", "pcd": "نمط الصواميل", "et": "الإزاحة", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "{style} rim, {finish}": "جنط {style}، {finish}", "{d}&Prime; {style} rim, {pcd}": "جنط {style} مقاس {d}&Prime;، {pcd}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
+function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] : s; }
+/* Шаблон, а не склейка слов: в арабском существительное идёт перед определением,
+   «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
+function tpl(pattern, r){
+  return L(pattern)
+    .replace("{style}",  L(r.style))
+    .replace("{finish}", L(r.finish))
+    .replace("{pcd}",    r.pcd)
+    .replace("{d}",      r.diameter);
+}
 
 /* ---------- 0. мелочь ---------- */
 document.getElementById("yr").textContent = new Date().getFullYear();
@@ -821,7 +851,7 @@ function gateSync(){
     if(g.w && g.p && g.r){
       var o={w:g.w,p:g.p,r:g.r};
       bits.push('<span class="pill">'+fmt(o)+'</span>');
-      bits.push('<span class="pill">القطر الكلي '+overall(o)+' mm</span>');
+      bits.push('<span class="pill">'+L("overall")+' '+overall(o)+' '+L("mm")+'</span>');
       bits.push('<span class="hint">رُشِّح الكتالوج على '+g.r+'″.</span>');
       document.getElementById("qSize").value = fmt(o);
       document.getElementById("decIn").value = fmt(o);
@@ -846,8 +876,12 @@ function gateSync(){
 var rimFilter="all", tyreFilter="all";
 var rimGrid=document.getElementById("rimGrid"), tyreGrid=document.getElementById("tyreGrid");
 
-function askFor(text){
+/* idx — индекс в списке «что вам нужно», а не значение: в /ar/ значения переведены,
+   индекс языконезависим. 0 = шины, 1 = диски. */
+function askFor(text, idx){
   document.getElementById("qSize").value = text;
+  var sel = document.getElementById("qItem");
+  if(idx !== null && sel.options[idx]) sel.selectedIndex = idx;
   quote();
   document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
 }
@@ -862,12 +896,12 @@ function renderRims(){
   });
   items.forEach(function(r){
     html += '<article class="card '+r.size+'">'
-      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" alt="'+r.style+' جنط، '+r.finish+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
-      + '<div class="card-b"><h3>'+r.diameter+'&Prime; '+r.style+'</h3>'
-      + '<div class="card-spec"><span><i>finish</i> '+r.finish+'</span><span><i>width</i> '+r.width+'</span>'
-      + '<span><i>pcd</i> '+r.pcd+'</span><span><i>et</i> '+r.et+'</span></div>'
-      + '<div class="card-foot"><span class="price">'+(r.price ? "درهم "+r.price : "السعر عند الطلب")+'</span>'
-      + '<button class="card-ask" data-ask="'+r.diameter+'&Prime; '+r.style+' جنط، '+r.pcd+'">اسألنا</button></div></div></article>';
+      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" alt="'+tpl("{style} rim, {finish}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
+      + '<div class="card-b"><h3>'+r.diameter+'&Prime; '+L(r.style)+'</h3>'
+      + '<div class="card-spec"><span><i>'+L("finish")+'</i> '+L(r.finish)+'</span><span><i>'+L("width")+'</i> '+r.width+'</span>'
+      + '<span><i>'+L("pcd")+'</i> '+r.pcd+'</span><span><i>'+L("et")+'</i> '+r.et+'</span></div>'
+      + '<div class="card-foot"><span class="price">'+(r.price ? L("AED")+" "+r.price : L("Price on request"))+'</span>'
+      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; {style} rim, {pcd}", r)+'">'+L("Ask us")+'</button></div></div></article>';
   });
   if(!items.length){
     html = '<p class="empty">لا يوجد في المعاينة ما يطابق '+(g.r?g.r+'″':'هذا الترشيح')+'. الأرجح أنه متوفر لدينا — اتصل على '+PHONE_H+'.</p>';
@@ -885,16 +919,20 @@ function renderTyres(){
     var size = t.width+"/"+t.profile+" R"+t.rim;
     html += '<article class="trow'+(hit?" hit":"")+'">'
       + '<span class="sz">'+size+'</span>'
-      + '<span class="mi"><span>'+t.use+'</span><span>load '+t.load+' · '+(LOAD[t.load]||"?")+' kg</span><span>'+t.speed+' · '+(SPEED[t.speed]||"?")+' km/h</span></span>'
-      + '<span class="bt"><span class="price">'+(t.price ? "درهم "+t.price : "السعر عند الطلب")+'</span>'
-      + '<button data-ask="'+size+' '+t.load+t.speed+'">اسألنا</button></span></article>';
+      + '<span class="mi"><span>'+L(t.use)+'</span><span>'+L("load")+' '+t.load+' · '+(LOAD[t.load]||"?")+' '+L("kg")+'</span><span>'+t.speed+' · '+(SPEED[t.speed]||"?")+' '+L("km/h")+'</span></span>'
+      + '<span class="bt"><span class="price">'+(t.price ? L("AED")+" "+t.price : L("Price on request"))+'</span>'
+      + '<button data-item="0" data-ask="'+size+' '+t.load+t.speed+'">'+L("Ask us")+'</button></span></article>';
   });
   tyreGrid.innerHTML = html || '<p class="empty">No sizes under هذا الترشيح yet.</p>';
 }
 
 document.addEventListener("click", function(e){
   var b = e.target.closest("[data-ask]");
-  if(b){ askFor(b.getAttribute("data-ask")); return; }
+  if(b){
+    var idx = b.hasAttribute("data-item") ? +b.getAttribute("data-item") : null;
+    askFor(b.getAttribute("data-ask"), idx);
+    return;
+  }
   var chip = e.target.closest(".chip");
   if(!chip) return;
   var box = chip.parentElement;
@@ -914,16 +952,17 @@ function decode(){
     altList.innerHTML = '<li><em>أدخل مقاساً أعلاه وستظهر البدائل هنا.</em></li>';
     return;
   }
-  setDec(0, o.w+" ملم");
-  setDec(1, o.p+"% · "+ (o.w*o.p/100).toFixed(0) +" ملم");
-  setDec(2, o.r+"″ · "+(o.r*25.4).toFixed(0)+" ملم");
-  setDec(3, overall(o)+" ملم");
-  setDec(4, o.load ? o.load+" · "+(LOAD[o.load]||"?")+" كجم" : "—");
-  setDec(5, o.speed ? o.speed+" · "+(SPEED[o.speed]||"?")+" كم/س" : "—");
+  var MM = L("mm"), KG = L("kg"), KMH = L("km/h");
+  setDec(0, o.w+" "+MM);
+  setDec(1, o.p+"% · "+ (o.w*o.p/100).toFixed(0) +" "+MM);
+  setDec(2, o.r+"″ · "+(o.r*25.4).toFixed(0)+" "+MM);
+  setDec(3, overall(o)+" "+MM);
+  setDec(4, o.load ? o.load+" · "+(LOAD[o.load]||"?")+" "+KG : "—");
+  setDec(5, o.speed ? o.speed+" · "+(SPEED[o.speed]||"?")+" "+KMH : "—");
   var alts = alternatives(o), h = "";
   alts.forEach(function(a, i){
     h += '<li'+(i===0?' class="best"':'')+'><span>'+fmt(a.s)+'</span>'
-       + '<em>'+(a.d>=0?"+":"")+a.d.toFixed(1)+'% · '+(a.sameRim?"نفس الجنط":a.s.r+"″ جنط")+'</em></li>';
+       + '<em>'+(a.d>=0?"+":"")+a.d.toFixed(1)+'% · '+(a.sameRim?L("same rim"):a.s.r+"″ "+L("rim"))+'</em></li>';
   });
   altList.innerHTML = h || '<li><em>لا يوجد ضمن ‎±3%‎ — اتصل بنا ونحلّها على الفور.</em></li>';
   document.getElementById("qSize").value = fmt(o);
@@ -985,7 +1024,8 @@ var qty = 1;
 function buildSvc(){
   if(!DATA) return;
   svcBox.innerHTML = DATA.services.map(function(s){
-    var AR={"Tyre fitting":"تركيب الإطارات","Wheel balancing":"ترصيص العجلات","Wheel alignment":"ضبط الزوايا","Puncture repair":"تصليح البنشر","Nitrogen inflation":"تعبئة نيتروجين","New valves":"صمامات جديدة","Old tyre disposal":"التخلص من الإطارات القديمة","Rim repair":"إصلاح الجنوط"};var nm=AR[s.name]||s.name;return '<label><input type="checkbox" value="'+nm+'"><span>'+nm+'</span></label>';
+    var nm = L(s.name);
+    return '<label><input type="checkbox" value="'+nm+'"><span>'+nm+'</span></label>';
   }).join("");
 }
 function setQty(n){

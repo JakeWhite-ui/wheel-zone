@@ -16,6 +16,40 @@ html = html.replace(
 html = html.replace('<link rel="canonical" href="https://tirez.ae/">',
                     '<link rel="canonical" href="https://tirez.ae/ar/">')
 html = html.replace('href="img/', 'href="../img/').replace('src="img/', 'src="../img/')
+html = html.replace('srcset="img/', 'srcset="../img/')
+assert 'srcset="../img/logo-mark' in html, "знак в шапке не перепривязан"
+
+# ---------- 1a. словарь терминов каталога: подставляется в L() ----------
+TERMS = {
+  # стили дисков
+  "Split-spoke": "قضبان مزدوجة", "Mesh": "شبكي", "Multi-spoke": "متعدد القضبان",
+  "Wire / fine spoke": "قضبان رفيعة", "Twin-spoke": "قضبان ثنائية",
+  # отделка
+  "Gloss black / red line": "أسود لامع / خط أحمر", "Bronze": "برونزي",
+  "Hyper silver": "فضي هايبر", "Polished chrome": "كروم مصقول",
+  "Polished face": "واجهة مصقولة", "Satin black": "أسود ساتان",
+  "Machined silver": "فضي مخرّط", "Matte bronze": "برونزي مطفي",
+  # подписи в карточке
+  "finish": "التشطيب", "width": "العرض", "pcd": "نمط الصواميل", "et": "الإزاحة",
+  "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي",
+  # шаблоны целиком — в арабском существительное перед определением
+  "{style} rim, {finish}": "جنط {style}، {finish}",
+  "{d}&Prime; {style} rim, {pcd}": "جنط {style} مقاس {d}&Prime;، {pcd}",
+  # тип шины
+  "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة",
+  # единицы и кнопки
+  "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س",
+  "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا",
+  # услуги
+  "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات",
+  "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر",
+  "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة",
+  "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط",
+}
+import json as _json
+_terms_js = "var TERMS = " + _json.dumps(TERMS, ensure_ascii=False) + ";"
+assert "var TERMS = window.WZ_TERMS || {};" in html, "крючок L() пропал из index.html"
+html = html.replace("var TERMS = window.WZ_TERMS || {};", _terms_js)
 html = html.replace('content="https://tirez.ae/img/', 'content="https://tirez.ae/img/')
 html = html.replace('fetch("catalog.json?v=1")', 'fetch("../catalog.json?v=1")')
 html = html.replace("""+r.img+'?v=1" alt=""", """+"../"+r.img+'?v=1" alt=""")
@@ -41,8 +75,11 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .hero-photo::after{background:linear-gradient(270deg,var(--ink) 0%,rgba(11,14,18,.95) 42%,rgba(11,14,18,.72) 100%),
   linear-gradient(0deg,var(--ink) 0%,rgba(11,14,18,.35) 34%,transparent 62%)}
 .hero-wheel{right:auto;left:-8vw}
+/* .gate внутри direction:ltr — там flex-end это право.
+   .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
+   уезжали на светлую половину фото и переставали читаться. Нужен flex-start. */
 .gate{direction:ltr;justify-content:flex-end}
-.gate-out,.hero-cta{justify-content:flex-end}
+.gate-out,.hero-cta{justify-content:flex-start}
 .gate-f .label{direction:rtl}
 .skip:focus{left:auto;right:var(--pad)}
 .alts li em,.trow .mi{direction:rtl}
@@ -54,6 +91,13 @@ html = html.replace("</style>", RTL_CSS + "\n</style>")
 
 # ---------- 3. перевод. Длинные строки первыми ----------
 T = [
+ # --- варианты в select: должны сработать РАНЬШЕ пунктов меню,
+ #     иначе ">Tyres<" из навигации съедает ">Tyres</option>" ---
+ ('>Tyres</option>', '>إطارات</option>'), ('>Rims</option>', '>جنوط</option>'),
+ ('>Rims + tyres</option>', '>جنوط + إطارات</option>'), ('>Rim repair</option>', '>إصلاح جنط</option>'),
+ ('value="Rims + tyres"', 'value="جنوط + إطارات"'), ('value="Rim repair"', 'value="إصلاح جنط"'),
+ ('value="Tyres"', 'value="إطارات"'), ('value="Rims"', 'value="جنوط"'),
+
  # --- head ---
  ("Wheel Zone Tyre Trading &mdash; Rims, Tyres &amp; Rim Repair in Ras Al Khor, Dubai",
   "ويل زون لتجارة الاطارات — جنوط وإطارات وإصلاح جنوط في راس الخور، دبي"),
@@ -135,7 +179,10 @@ T = [
  ("Fitting, balancing, puncture repair and disposal of the old set — all of it happens here, in one visit.",
   "التركيب والترصيص وتصليح البنشر والتخلص من الطقم القديم — كل ذلك هنا، في زيارة واحدة."),
  ('aria-label="Filter tyres"', 'aria-label="ترشيح الإطارات"'),
- (">Passenger<", ">صالون<"), (">SUV<", ">دفع رباعي<"), (">Performance<", ">أداء عالٍ<"),
+ # Подписи чипов должны совпадать со словарём TERMS, иначе фильтр и карточка
+ # называют одно и то же разными словами
+ (">Passenger<", ">ركاب<"), (">SUV<", ">دفع رباعي<"), (">Performance<", ">أداء عالٍ<"),
+ (">4&times;4<", ">طرق وعرة<"),
  ("<b>Prices are being loaded.</b> Brands and prices come straight from the shop&rsquo;s stock list. Until then every size here is quoted on request — call",
   "<b>الأسعار قيد التحميل.</b> الماركات والأسعار تأتي مباشرة من قائمة مخزون المحل. حتى ذلك الحين، كل مقاس هنا بسعر عند الطلب — اتصل على"),
  ("and you will get the number in a minute.", "وستحصل على الرقم خلال دقيقة."),
@@ -210,26 +257,24 @@ T = [
  (">Call us<", ">اتصل بنا<"), (">Get a price<", ">اطلب السعر<"),
 
  # --- строки внутри JS ---
- ('"Price on request"', '"السعر عند الطلب"'),
- ('"AED "+r.price', '"درهم "+r.price'),
- ('"AED "+t.price', '"درهم "+t.price'),
+ # цена, единицы, «Ask us», стили дисков и услуги идут через L() и словарь TERMS выше.
+ # Дословных замен для них больше нет: они били по JS-литералам и ломались от любой правки кода.
  ("Nothing in the preview matches ", "لا يوجد في المعاينة ما يطابق "),
  ("that filter", "هذا الترشيح"),
  ("We almost certainly have it on the shelf — call ", "الأرجح أنه متوفر لدينا — اتصل على "),
  ("No sizes under that filter yet.", "لا توجد مقاسات ضمن هذا الترشيح بعد."),
  ("Catalogue could not be loaded. Call ", "تعذّر تحميل الكتالوج. اتصل على "),
  (" and we will talk it through.", " وسنتحدث في الأمر."),
- ('">Ask us</button>', '">اسألنا</button>'),
- (">Ask us<", ">اسألنا<"),
  ("Width is usually between 135 and 355.", "العرض عادةً بين 135 و 355."),
  ("Rim diameter is usually between 13 and 24.", "قطر الجنط عادةً بين 13 و 24."),
- ("overall ", "القطر الكلي "),
  ("Catalogue filtered to ", "رُشِّح الكتالوج على "),
  ("Catalogue filtered.", "رُشِّح الكتالوج."),
  ("Nothing within ±3% — call us, we will work it out on the spot.",
   "لا يوجد ضمن ‎±3%‎ — اتصل بنا ونحلّها على الفور."),
- ("Vahid · Local Guide, 330 reviews · Google", "فهيد · مرشد محلي، 330 تقييماً · جوجل"),
- ("Mohammad Alalawi · Google", "محمد العلوي · جوجل"),
+ # Имена оставляем латиницей: это подписи профилей Google, а сами отзывы приведены
+ # дословно по-английски. Переводить чужие имена — выдумывать.
+ ("Vahid · Local Guide, 330 reviews · Google", "Vahid · مرشد محلي، 330 تقييماً · جوجل"),
+ ("Mohammad Alalawi · Google", "Mohammad Alalawi · جوجل"),
  ('"FULL SET"', '"طقم كامل"'),
  ('"just the one"', '"قطعة واحدة"'),
  ('qty + " pieces"', 'qty + " قطع"'),
@@ -241,27 +286,7 @@ T = [
  ('L.push("Quantity: " + qty', 'L.push("الكمية: " + qty'),
  ('L.push("Work needed: " + picked.join(", "));', 'L.push("الخدمات المطلوبة: " + picked.join("، "));'),
  ('L.push("Sent from tirez.ae");', 'L.push("أُرسلت من tirez.ae");'),
- ('" mm"', '" ملم"'), ('+" mm"', '+" ملم"'),
- ('" kg"', '" كجم"'), ('" km/h"', '" كم/س"'),
- ('"same rim"', '"نفس الجنط"'), ('a.s.r+"″ rim"', 'a.s.r+"″ جنط"'),
- ('value="Tyres"', 'value="إطارات"'), ('value="Rims"', 'value="جنوط"'),
- ('value="Rims + tyres"', 'value="جنوط + إطارات"'), ('value="Rim repair"', 'value="إصلاح جنط"'),
- ('>Tyres</option>', '>إطارات</option>'), ('>Rims</option>', '>جنوط</option>'),
- ('>Rims + tyres</option>', '>جنوط + إطارات</option>'), ('>Rim repair</option>', '>إصلاح جنط</option>'),
- ("' rim, '", "' جنط، '"),
- ("rim, '+r.finish", "جنط، '+r.finish"),
- ("' rim&Prime;", "' جنط&Prime;"),
-
- # --- услуги из catalog.json рендерятся по name, переводим на лету ---
- ('return \'<label><input type="checkbox" value="\'+s.name+\'"><span>\'+s.name+\'</span></label>\';',
-  'var AR={"Tyre fitting":"تركيب الإطارات","Wheel balancing":"ترصيص العجلات","Wheel alignment":"ضبط الزوايا",'
-  '"Puncture repair":"تصليح البنشر","Nitrogen inflation":"تعبئة نيتروجين","New valves":"بsusan",'
-  '"Old tyre disposal":"التخلص من الإطارات القديمة","Rim repair":"إصلاح الجنوط"};'
-  'var nm=AR[s.name]||s.name;'
-  'return \'<label><input type="checkbox" value="\'+nm+\'"><span>\'+nm+\'</span></label>\';'),
 ]
-# опечатка-страховка
-T = [(a, b.replace('"بsusan"', '"صمامات جديدة"')) for a, b in T]
 
 for a, b in T:
     html = html.replace(a, b)
