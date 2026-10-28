@@ -111,11 +111,54 @@
 
 ---
 
+## 5a. Применимости дисков — первые реальные данные (WhatsApp, 26.10.2026)
+
+Пришли от клиента. Формат строки: `диаметр · PCD · CB`.
+
+| Авто | Диаметры | PCD | CB |
+|---|---|---|---|
+| Jeep Wrangler | 17 | 5×127 | 71 |
+| Jetour T2 | 17, 20 | 5×108 | 60 |
+| Toyota Land Cruiser 100 | 16 | 5×150 | 110 |
+| Toyota Land Cruiser 200 | 17, 18 | 5×150 | 110 |
+| Toyota Land Cruiser 300 | 17 | 6×139.7 | 95 |
+| Nissan Patrol Y61 | 16, 17 | 6×139.7 | 110 |
+| Nissan Patrol Y62 | 17, 18, 20 | 6×139.7 | 110 |
+
+Лежит в `catalog.json` → `vehicles` + `rims`, 11 позиций. На сайте — подбор «по автомобилю»:
+марка → модель → показываются только подходящие диски, плюс плашка PCD / CB / диаметры.
+
+### 🔴 Одно расхождение — проверить у клиента
+
+**Nissan Patrol Y62: штатное центральное отверстие 78,1 мм, а не 110.**
+110,1 мм — это Y61, предыдущее поколение. Проверено по двум независимым источникам:
+[dynamicwheelco.com.au](https://dynamicwheelco.com.au/vehicle/nissan/patrol-y62/) и
+[avtoreference.com](https://avtoreference.com/en/auto/nissan/patrol/2019/).
+
+Значит диски CB110 на Y62 физически садятся, но **только через центровочные кольца**.
+Это не ошибка клиента — так и торгуют, кольца копеечные. Но на сайте об этом
+молчать нельзя: человек купит, приедет и не наденет.
+
+**Решение пока:** на сайт расхождение НЕ выведено, в `catalog.json` стоит то, что
+прислал клиент. Как ответит — либо добавляем строку «нужны центровочные кольца 110→78,1»,
+либо правим CB.
+
+### Чего в применимостях НЕТ
+- **Ширина (J) и вылет (ET)** — без них подбор неполный. На карточках стоит «уточняется».
+- Размеры шин под эти же машины.
+- Цены и наличие по каждой позиции.
+- Свои фото — на карточках иллюстративные, и это написано прямо в секции.
+
+---
+
 ## 6. Что дослать (RU — для Александра)
 
 **Блокеры, без них сайт не наполнить:**
 1. **Прайс или хотя бы вилки** — иначе каталог и калькулятор без цифр. Цены не выдумываю.
-2. **Что реально лежит на складе** — бренды шин, бренды/размеры дисков. Иначе каталог пустой.
+2. **Ширина (J) и вылет (ET)** по каждой применимости из таблицы 5a.
+3. **Остальные машины** — прислали 7, наверняка есть ещё.
+4. ⚠️ **Подтвердить CB у Patrol Y62** — см. красный блок выше.
+5. **Бренды шин**, если каталог шин тоже должен стать реальным.
 3. **Полное расписание** на неделю — знаю только «закрывается в 23:00».
 4. **WhatsApp-номер** — тот же `04 576 2199` или мобильный? Это главная кнопка на сайте.
 5. **Ссылка на их профиль Google Maps** — для кнопки «4.4 на Google».
@@ -132,11 +175,15 @@
 
 > Hi! I'm rebuilding the Wheel Zone website from scratch — the current one still has the template's demo contacts and demo reviews on it, so it can't be used as it is. To fill it with your real business I need the following:
 >
+> **The fitment list you sent**
+> 1. Thank you — Wrangler, Jetour T2, LC100/200/300, Patrol Y61 and Y62 are now live on the site as a "find by vehicle" picker. For each of those, I still need the **rim width (J) and the offset (ET)**. Without those two numbers a customer cannot be sure the wheel will clear the brake and sit flush.
+> 2. **One thing to double-check: Nissan Patrol Y62.** You listed CB110. The factory hub bore on the Y62 is 78.1 mm — 110 mm is the older Y61. So a CB110 wheel will fit the Y62 only with centring rings. Is that how you sell it (wheel + rings), or did you mean a different centre bore? I have left your figure on the site untouched until you confirm, but I would rather add a line about the rings than have a customer drive away with a wheel that will not centre.
+> 3. Which other cars can you cover? Seven is a good start, but the more models in the picker, the more people land on the right page.
+>
 > **Stock & pricing**
-> 1. Which tyre brands do you actually keep in stock?
-> 2. Which rim brands / styles do you carry, and in which diameters (17", 18", 19", 20", 22"…)?
-> 3. Price list, or at least a price range per size — for example "18" rims from AED X", "225/45R18 from AED Y". Without numbers the site can only say "price on request".
-> 4. What do you charge for fitting, balancing, alignment, puncture repair, nitrogen and rim repair?
+> 4. Price list, or at least a price range per fitment — for example "17" 6x139.7 from AED X". Without numbers the site can only say "price on request".
+> 5. Which tyre brands do you actually keep in stock, and what tyre sizes go with each of the cars above (for example 265/70R18 for the Y62)?
+> 6. What do you charge for fitting, balancing, alignment, puncture repair, nitrogen and rim repair?
 >
 > **Services**
 > 5. Your customers specifically mention rim repair in the reviews. What exactly do you repair — buckled rims, cracks, curb rash, refinishing/powder coating? How long does it take?

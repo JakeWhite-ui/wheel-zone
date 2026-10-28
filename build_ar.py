@@ -21,20 +21,26 @@ assert 'srcset="../img/logo-mark' in html, "знак в шапке не пере
 
 # ---------- 1a. словарь терминов каталога: подставляется в L() ----------
 TERMS = {
-  # стили дисков
-  "Split-spoke": "قضبان مزدوجة", "Mesh": "شبكي", "Multi-spoke": "متعدد القضبان",
-  "Wire / fine spoke": "قضبان رفيعة", "Twin-spoke": "قضبان ثنائية",
-  # отделка
-  "Gloss black / red line": "أسود لامع / خط أحمر", "Bronze": "برونزي",
-  "Hyper silver": "فضي هايبر", "Polished chrome": "كروم مصقول",
-  "Polished face": "واجهة مصقولة", "Satin black": "أسود ساتان",
-  "Machined silver": "فضي مخرّط", "Matte bronze": "برونزي مطفي",
-  # подписи в карточке
-  "finish": "التشطيب", "width": "العرض", "pcd": "نمط الصواميل", "et": "الإزاحة",
+  # подписи в карточке диска
+  "width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز",
   "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي",
+  "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً",
+  # подбор по автомобилю
+  "Find by vehicle": "ابحث حسب السيارة",
+  "Pick your car and we show only the rims that bolt on.":
+    "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.",
+  "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين",
+  "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل",
+  "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز",
+  "Diameters we list": "المقاسات المتوفرة لدينا",
+  "Nothing listed for that combination yet. Call ":
+    "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ",
+  " — the list on this page is only what we have confirmed so far.":
+    " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.",
   # шаблоны целиком — в арабском существительное перед определением
-  "{style} rim, {finish}": "جنط {style}، {finish}",
-  "{d}&Prime; {style} rim, {pcd}": "جنط {style} مقاس {d}&Prime;، {pcd}",
+  "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}",
+  "{d}&Prime; rim, {pcd}, CB {cb} — {fits}":
+    "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}",
   # тип шины
   "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة",
   # единицы и кнопки
@@ -145,17 +151,24 @@ T = [
 
  # --- rims ---
  ("01 — The wall", "01 — الجدار"),
- ("Rims, whatever style you&nbsp;are thinking of", "جنوط، بأي تصميم يخطر على بالك"),
+ ("Rims that fit your&nbsp;car", "جنوط تناسب سيارتك"),
  ("Our customers say it better than we could:", "عملاؤنا قالوها أفضل منا:"),
  ("“the selection of rims? Crazy good.”", "«تشكيلة الجنوط؟ رهيبة.»"),
- ("Filter by diameter and bolt pattern, then ask us for your size.",
-  "رشِّح حسب القطر ونمط الصواميل، ثم اسألنا عن مقاسك."),
- ('aria-label="Filter rims"', 'aria-label="ترشيح الجنوط"'),
- (">All<", ">الكل<"),
- ("<b>Catalogue preview.</b> The specifications below demonstrate the filter. The live stock list and prices are being loaded — call",
-  "<b>معاينة الكتالوج.</b> المواصفات أدناه لعرض طريقة الترشيح. قائمة المخزون والأسعار قيد التحميل — اتصل على"),
- ("and we will tell you exactly what is on the shelf today.",
-  "وسنخبرك بالضبط بما هو متوفر على الرف اليوم."),
+ ("Tell us the car and we will tell you what bolts on.",
+  "قل لنا نوع السيارة ونقول لك ما الذي يركّب عليها."),
+ ('aria-label="Filter rims by diameter"', 'aria-label="ترشيح الجنوط حسب القطر"'),
+ ("<b>These fitments are confirmed. Prices and photos are not yet.</b> Diameter, bolt pattern and centre bore below come straight from the shop. Rim width, offset and price are still being compiled, and the photographs are illustrative — call",
+  "<b>بيانات التركيب هذه مؤكّدة. أما الأسعار والصور فلا.</b> القطر ونمط الصواميل وفتحة المركز أدناه واردة من المحل مباشرة. أما عرض الجنط والإزاحة والسعر فما زالت قيد التجميع، والصور توضيحية — اتصل على"),
+ ("for the exact wheel and the number.", "لمعرفة الجنط المحدد والسعر."),
+ # Подписи в подборе по автомобилю: их рендерит JS через L(), поэтому
+ # здесь только статические метки полей
+ ('<span class="label">Find by vehicle</span>', '<span class="label">ابحث حسب السيارة</span>'),
+ ("Pick your car and we show only the rims that bolt on.",
+  "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط."),
+ (">Make<", ">الماركة<"), (">Model<", ">الموديل<"), (">Reset<", ">إعادة تعيين<"),
+ (">Any make<", ">كل الماركات<"), (">Any model<", ">كل الموديلات<"),
+ (">Bolt pattern<", ">نمط الصواميل<"), (">Centre bore<", ">فتحة المركز<"),
+ (">Diameters we list<", ">المقاسات المتوفرة لدينا<"),
 
  # --- repair ---
  ("02 — What the neighbours don&rsquo;t do", "02 — ما لا يفعله الجيران"),
@@ -259,9 +272,6 @@ T = [
  # --- строки внутри JS ---
  # цена, единицы, «Ask us», стили дисков и услуги идут через L() и словарь TERMS выше.
  # Дословных замен для них больше нет: они били по JS-литералам и ломались от любой правки кода.
- ("Nothing in the preview matches ", "لا يوجد في المعاينة ما يطابق "),
- ("that filter", "هذا الترشيح"),
- ("We almost certainly have it on the shelf — call ", "الأرجح أنه متوفر لدينا — اتصل على "),
  ("No sizes under that filter yet.", "لا توجد مقاسات ضمن هذا الترشيح بعد."),
  ("Catalogue could not be loaded. Call ", "تعذّر تحميل الكتالوج. اتصل على "),
  (" and we will talk it through.", " وسنتحدث في الأمر."),

@@ -1,120 +1,87 @@
 {
-  "_note": "CATALOGUE PREVIEW. Specifications below are standard industry fitments used to demonstrate the filter engine. They are NOT a statement of Wheel Zone's actual stock. Replace this file with the real stock list and set `price` values (AED) — the site reads it directly, no code changes needed.",
+  "_note": "ПРИМЕНИМОСТИ — реальные данные от Wheel Zone (WhatsApp, 26.10.2026). Диаметр, разболтовка (PCD) и центральное отверстие (CB) взяты из сообщения клиента как есть. ШИРИНА (J), ВЫЛЕТ (ET) и ЦЕНЫ клиентом НЕ присланы — поля оставлены null, сайт честно пишет «уточняется». Фотографии иллюстративные, своих фото магазин пока не дал. Размеры шин в tyres[] — универсальная типоразмерная сетка, НЕ заявление о складе.",
   "_pricesPending": true,
+  "_photosIllustrative": true,
+
+  "vehicles": [
+    { "id": "jeep-wrangler", "make": "Jeep",   "model": "Wrangler" },
+    { "id": "jetour-t2",     "make": "Jetour", "model": "T2" },
+    { "id": "lc100",         "make": "Toyota", "model": "Land Cruiser 100" },
+    { "id": "lc200",         "make": "Toyota", "model": "Land Cruiser 200" },
+    { "id": "lc300",         "make": "Toyota", "model": "Land Cruiser 300" },
+    { "id": "patrol-y61",    "make": "Nissan", "model": "Patrol Y61" },
+    { "id": "patrol-y62",    "make": "Nissan", "model": "Patrol Y62" }
+  ],
+
   "rims": [
     {
-      "id": "r1",
-      "style": "Split-spoke",
-      "finish": "Gloss black / red line",
-      "diameter": 20,
-      "width": "9.0J",
-      "pcd": "5x120",
-      "et": 30,
-      "img": "img/rim-redline.webp",
-      "w": 1600,
-      "h": 2133,
-      "size": "big",
-      "price": null
+      "id": "d20-6x139-110", "d": 20, "pcd": "6x139.7", "cb": 110,
+      "fits": ["patrol-y62"],
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133,
+      "size": "big", "width": null, "et": null, "price": null
     },
     {
-      "id": "r2",
-      "style": "Mesh",
-      "finish": "Bronze",
-      "diameter": 19,
-      "width": "8.5J",
-      "pcd": "5x114.3",
-      "et": 35,
-      "img": "img/rim-bronze.webp",
-      "w": 1600,
-      "h": 2400,
-      "size": "std",
-      "price": null
+      "id": "d20-5x108-60", "d": 20, "pcd": "5x108", "cb": 60,
+      "fits": ["jetour-t2"],
+      "img": "img/rim-wire.webp", "w": 1600, "h": 2848,
+      "size": "tall", "width": null, "et": null, "price": null
     },
     {
-      "id": "r3",
-      "style": "Multi-spoke",
-      "finish": "Hyper silver",
-      "diameter": 18,
-      "width": "8.0J",
-      "pcd": "5x112",
-      "et": 35,
-      "img": "img/rim-caliper.webp",
-      "w": 1600,
-      "h": 2416,
-      "size": "std",
-      "price": null
+      "id": "d18-6x139-110", "d": 18, "pcd": "6x139.7", "cb": 110,
+      "fits": ["patrol-y62"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
+      "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "r4",
-      "style": "Wire / fine spoke",
-      "finish": "Polished chrome",
-      "diameter": 22,
-      "width": "9.0J",
-      "pcd": "6x139.7",
-      "et": 25,
-      "img": "img/rim-wire.webp",
-      "w": 1600,
-      "h": 2848,
-      "size": "tall",
-      "price": null
+      "id": "d18-5x150-110", "d": 18, "pcd": "5x150", "cb": 110,
+      "fits": ["lc200"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124,
+      "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "r5",
-      "style": "Multi-spoke",
-      "finish": "Polished face",
-      "diameter": 21,
-      "width": "9.5J",
-      "pcd": "5x112",
-      "et": 25,
-      "img": "img/rim-chrome.webp",
-      "w": 1600,
-      "h": 2124,
-      "size": "std",
-      "price": null
+      "id": "d17-5x127-71", "d": 17, "pcd": "5x127", "cb": 71,
+      "fits": ["jeep-wrangler"],
+      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
+      "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "r6",
-      "style": "Twin-spoke",
-      "finish": "Satin black",
-      "diameter": 18,
-      "width": "8.0J",
-      "pcd": "5x100",
-      "et": 38,
-      "img": "img/rim-dark.webp",
-      "w": 1600,
-      "h": 2400,
-      "size": "std",
-      "price": null
+      "id": "d17-6x139-95", "d": 17, "pcd": "6x139.7", "cb": 95,
+      "fits": ["lc300"],
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
+      "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "r7",
-      "style": "Multi-spoke",
-      "finish": "Machined silver",
-      "diameter": 17,
-      "width": "7.5J",
-      "pcd": "5x114.3",
-      "et": 40,
-      "img": "img/rim-chrome.webp",
-      "w": 1600,
-      "h": 2124,
-      "size": "std",
-      "price": null
+      "id": "d17-6x139-110", "d": 17, "pcd": "6x139.7", "cb": 110,
+      "fits": ["patrol-y61", "patrol-y62"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124,
+      "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "r8",
-      "style": "Mesh",
-      "finish": "Matte bronze",
-      "diameter": 20,
-      "width": "8.5J",
-      "pcd": "6x139.7",
-      "et": 20,
-      "img": "img/rim-bronze.webp",
-      "w": 1600,
-      "h": 2400,
-      "size": "std",
-      "price": null
+      "id": "d17-5x150-110", "d": 17, "pcd": "5x150", "cb": 110,
+      "fits": ["lc200"],
+      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
+      "size": "std", "width": null, "et": null, "price": null
+    },
+    {
+      "id": "d17-5x108-60", "d": 17, "pcd": "5x108", "cb": 60,
+      "fits": ["jetour-t2"],
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133,
+      "size": "std", "width": null, "et": null, "price": null
+    },
+    {
+      "id": "d16-5x150-110", "d": 16, "pcd": "5x150", "cb": 110,
+      "fits": ["lc100"],
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
+      "size": "std", "width": null, "et": null, "price": null
+    },
+    {
+      "id": "d16-6x139-110", "d": 16, "pcd": "6x139.7", "cb": 110,
+      "fits": ["patrol-y61"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
+      "size": "std", "width": null, "et": null, "price": null
     }
   ],
+
   "tyres": [
     { "id": "t1",  "width": 195, "profile": 65, "rim": 15, "load": 91,  "speed": "V", "use": "Passenger", "price": null },
     { "id": "t2",  "width": 205, "profile": 55, "rim": 16, "load": 91,  "speed": "V", "use": "Passenger", "price": null },
@@ -129,6 +96,7 @@
     { "id": "t11", "width": 285, "profile": 50, "rim": 20, "load": 116, "speed": "V", "use": "4x4", "price": null },
     { "id": "t12", "width": 295, "profile": 35, "rim": 21, "load": 107, "speed": "Y", "use": "Performance", "price": null }
   ],
+
   "services": [
     { "id": "s1", "name": "Tyre fitting", "price": null },
     { "id": "s2", "name": "Wheel balancing", "price": null },

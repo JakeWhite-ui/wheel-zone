@@ -200,7 +200,32 @@ section{padding-block:clamp(64px,9vw,136px)}
 .chip:hover{border-color:var(--line-lit);color:var(--text)}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 @media(max-width:767px){.chip{height:44px}.filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}}
+/* подбор по автомобилю */
+.picker{border:1px solid var(--line);border-radius:var(--radius);background:var(--ink-2);
+  padding:clamp(20px,2.4vw,28px);margin-bottom:24px}
+.picker-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.picker-hint{color:var(--muted);font-size:var(--fs-small)}
+.picker-row{display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end}
+.picker-row .field{margin-bottom:0}
+.picker-row select{height:52px;padding:0 14px;background:var(--ink);border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--text);width:100%;font-size:16px}
+.picker-row select:focus{border-color:var(--accent);outline:none}
+.picker-row select:disabled{color:var(--dim);background:var(--ink-3);cursor:not-allowed}
+.picker-row .btn{height:52px;min-height:52px}
+@media(max-width:767px){.picker-row{grid-template-columns:1fr}.picker-row .btn{width:100%}}
+.fitment{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--radius);margin:18px 0 0}
+.fitment > div{background:var(--ink);padding:14px 16px}
+.fitment dt{margin:0 0 6px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.fitment dd{margin:0;font-size:17px;color:var(--accent-lit)}
+@media(max-width:639px){.fitment{grid-template-columns:1fr}}
+
 .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:170px;gap:24px;grid-auto-flow:dense}
+.card-fits{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.card-fits b{color:var(--text);font-weight:600}
+.card-spec .soon{color:var(--dim)}
 .card{position:relative;background:var(--ink-3);border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;box-shadow:var(--sh-card);display:flex;flex-direction:column;
   transition:border-color .2s,box-shadow .25s,transform .25s}
@@ -458,25 +483,40 @@ section{padding-block:clamp(64px,9vw,136px)}
     <div class="sec-head">
       <div>
         <p class="label" data-rv>01 — The wall</p>
-        <h2 data-rv>Rims, whatever style you&nbsp;are thinking of</h2>
+        <h2 data-rv>Rims that fit your&nbsp;car</h2>
       </div>
-      <p class="lead" data-rv style="max-width:40ch">Our customers say it better than we could: <a href="#reviews">“the selection of rims? Crazy good.”</a> Filter by diameter and bolt pattern, then ask us for your size.</p>
+      <p class="lead" data-rv style="max-width:40ch">Our customers say it better than we could: <a href="#reviews">“the selection of rims? Crazy good.”</a> Tell us the car and we will tell you what bolts on.</p>
     </div>
 
     <div class="notice" data-rv>
       <span class="mono" style="color:var(--accent-lit)">!</span>
-      <span><b>Catalogue preview.</b> The specifications below demonstrate the filter. The live stock list and prices are being loaded — call <a href="tel:+97145762199">04 576 2199</a> and we will tell you exactly what is on the shelf today.</span>
+      <span><b>These fitments are confirmed. Prices and photos are not yet.</b> Diameter, bolt pattern and centre bore below come straight from the shop. Rim width, offset and price are still being compiled, and the photographs are illustrative — call <a href="tel:+97145762199">04 576 2199</a> for the exact wheel and the number.</span>
     </div>
 
-    <div class="filters" id="rimFilters" role="group" aria-label="Filter rims">
-      <button class="chip" aria-pressed="true" data-f="all">All</button>
-      <button class="chip" aria-pressed="false" data-f="d17">17&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d18">18&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d19">19&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d20">20&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d21">21&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d22">22&Prime;</button>
+    <div class="picker" data-rv>
+      <div class="picker-head">
+        <span class="label">Find by vehicle</span>
+        <span class="picker-hint">Pick your car and we show only the rims that bolt on.</span>
+      </div>
+      <div class="picker-row">
+        <div class="field">
+          <label class="label" for="pMake">Make</label>
+          <select id="pMake"><option value="">Any make</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="pModel">Model</label>
+          <select id="pModel" disabled><option value="">Any model</option></select>
+        </div>
+        <button class="btn btn-ghost" id="pReset" type="button">Reset</button>
+      </div>
+      <dl class="fitment" id="fitment" hidden>
+        <div><dt>Bolt pattern</dt><dd class="mono" id="fPcd">—</dd></div>
+        <div><dt>Centre bore</dt><dd class="mono" id="fCb">—</dd></div>
+        <div><dt>Diameters we list</dt><dd class="mono" id="fD">—</dd></div>
+      </dl>
     </div>
+
+    <div class="filters" id="rimFilters" role="group" aria-label="Filter rims by diameter"></div>
 
     <div class="bento" id="rimGrid"></div>
   </div>
@@ -747,10 +787,10 @@ function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] 
    «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
 function tpl(pattern, r){
   return L(pattern)
-    .replace("{style}",  L(r.style))
-    .replace("{finish}", L(r.finish))
-    .replace("{pcd}",    r.pcd)
-    .replace("{d}",      r.diameter);
+    .replace("{d}",    r.d)
+    .replace("{pcd}",  r.pcd)
+    .replace("{cb}",   r.cb)
+    .replace("{fits}", r.fits.map(vehicleName).join(", "));
 }
 
 /* ---------- 0. мелочь ---------- */
@@ -844,7 +884,7 @@ function gateSync(){
 });
 
 /* ---------- 4. каталог ---------- */
-var rimFilter="all", tyreFilter="all";
+var rimFilter="all", tyreFilter="all", pickVehicle="";
 var rimGrid=document.getElementById("rimGrid"), tyreGrid=document.getElementById("tyreGrid");
 
 /* idx — индекс в списке «что вам нужно», а не значение: в /ar/ значения переведены,
@@ -857,29 +897,93 @@ function askFor(text, idx){
   document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
 }
 
+function vehicleName(id){
+  var v = DATA.vehicles.filter(function(x){ return x.id === id; })[0];
+  return v ? v.make + " " + v.model : id;
+}
+
 function renderRims(){
   if(!DATA) return;
   var g = gateRead(), html = "";
   var items = DATA.rims.filter(function(r){
-    if(rimFilter !== "all" && ("d"+r.diameter) !== rimFilter) return false;
-    if(rimFilter === "all" && g.r && r.diameter !== g.r) return false;
+    if(pickVehicle && r.fits.indexOf(pickVehicle) === -1) return false;
+    if(rimFilter !== "all" && ("d"+r.d) !== rimFilter) return false;
+    /* размер из первого экрана фильтрует каталог только пока не выбран автомобиль:
+       явный выбор машины важнее, чем цифра, набранная наверху */
+    if(!pickVehicle && rimFilter === "all" && g.r && r.d !== g.r) return false;
     return true;
   });
   items.forEach(function(r){
+    var fits = r.fits.map(function(id){ return "<b>"+vehicleName(id)+"</b>"; }).join(" · ");
+    var soon = '<span class="soon">'+L("to confirm")+'</span>';
     html += '<article class="card '+r.size+'">'
-      + '<div class="card-ph"><img src="'+r.img+'?v=1" alt="'+tpl("{style} rim, {finish}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
-      + '<div class="card-b"><h3>'+r.diameter+'&Prime; '+L(r.style)+'</h3>'
-      + '<div class="card-spec"><span><i>'+L("finish")+'</i> '+L(r.finish)+'</span><span><i>'+L("width")+'</i> '+r.width+'</span>'
-      + '<span><i>'+L("pcd")+'</i> '+r.pcd+'</span><span><i>'+L("et")+'</i> '+r.et+'</span></div>'
+      + '<div class="card-ph"><img src="'+r.img+'?v=1" alt="'+tpl("{d}&Prime; rim, {pcd}, fits {fits}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
+      + '<div class="card-b"><h3>'+r.d+'&Prime; &middot; '+r.pcd.replace("x","&times;")+'</h3>'
+      + '<div class="card-spec"><span><i>'+L("cb")+'</i> '+r.cb+' '+L("mm")+'</span>'
+      + '<span><i>'+L("width")+'</i> '+(r.width || soon)+'</span>'
+      + '<span><i>'+L("et")+'</i> '+(r.et || soon)+'</span></div>'
+      + '<div class="card-fits">'+L("Fits")+' '+fits+'</div>'
       + '<div class="card-foot"><span class="price">'+(r.price ? L("AED")+" "+r.price : L("Price on request"))+'</span>'
-      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; {style} rim, {pcd}", r)+'">'+L("Ask us")+'</button></div></div></article>';
+      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; rim, {pcd}, CB {cb} — {fits}", r)+'">'+L("Ask us")+'</button></div></div></article>';
   });
   if(!items.length){
-    html = '<p class="empty">Nothing in the preview matches '+(g.r?g.r+'″':'that filter')+'. We almost certainly have it on the shelf — call '+PHONE_H+'.</p>';
+    html = '<p class="empty">'+L("Nothing listed for that combination yet. Call ")+PHONE_H+L(" — the list on this page is only what we have confirmed so far.")+'</p>';
   }
   rimGrid.innerHTML = html;
   sweep(true);
 }
+
+/* ---------- 4a. подбор по автомобилю ---------- */
+var pMake = document.getElementById("pMake"), pModel = document.getElementById("pModel"),
+    fitBox = document.getElementById("fitment");
+
+function buildPicker(){
+  var makes = [];
+  DATA.vehicles.forEach(function(v){ if(makes.indexOf(v.make) === -1) makes.push(v.make); });
+  pMake.innerHTML = '<option value="">'+L("Any make")+'</option>'
+    + makes.map(function(m){ return '<option value="'+m+'">'+m+'</option>'; }).join("");
+  /* чипы диаметров строим из данных, а не хардкодом: клиент пришлёт новые применимости —
+     кнопки появятся сами */
+  var ds = [];
+  DATA.rims.forEach(function(r){ if(ds.indexOf(r.d) === -1) ds.push(r.d); });
+  ds.sort(function(a,b){ return a-b; });
+  document.getElementById("rimFilters").innerHTML =
+    '<button class="chip" aria-pressed="true" data-f="all">'+L("All")+'</button>'
+    + ds.map(function(d){ return '<button class="chip" aria-pressed="false" data-f="d'+d+'">'+d+'&Prime;</button>'; }).join("");
+}
+
+function fillModels(){
+  var make = pMake.value;
+  var list = DATA.vehicles.filter(function(v){ return v.make === make; });
+  pModel.innerHTML = '<option value="">'+L("Any model")+'</option>'
+    + list.map(function(v){ return '<option value="'+v.id+'">'+v.model+'</option>'; }).join("");
+  pModel.disabled = !make;
+}
+
+function applyVehicle(){
+  pickVehicle = pModel.value || "";
+  if(!pickVehicle){ fitBox.hidden = true; }
+  else {
+    var mine = DATA.rims.filter(function(r){ return r.fits.indexOf(pickVehicle) > -1; });
+    document.getElementById("fPcd").innerHTML = mine.length ? mine[0].pcd.replace("x","&times;") : "—";
+    document.getElementById("fCb").textContent = mine.length ? mine[0].cb + " " + L("mm") : "—";
+    document.getElementById("fD").innerHTML = mine.map(function(r){ return r.d+"&Prime;"; })
+      .sort().join(" · ") || "—";
+    fitBox.hidden = false;
+  }
+  /* сброс диаметра: иначе выбрал машину, а на экране пусто из-за старого чипа */
+  rimFilter = "all";
+  var chips = document.querySelectorAll("#rimFilters .chip");
+  for(var i=0;i<chips.length;i++) chips[i].setAttribute("aria-pressed", i === 0 ? "true" : "false");
+  renderRims();
+}
+
+pMake.addEventListener("change", function(){ fillModels(); applyVehicle(); });
+pModel.addEventListener("change", applyVehicle);
+document.getElementById("pReset").addEventListener("click", function(){
+  pMake.value = ""; fillModels(); applyVehicle();
+  gW.value = gP.value = gR.value = ""; gateSync();
+});
 
 function renderTyres(){
   if(!DATA) return;
@@ -1116,7 +1220,7 @@ if(!RM && !matchMedia("(hover: none)").matches){
 /* ---------- 8. старт ---------- */
 fetch("catalog.json?v=1")
   .then(function(r){ return r.json(); })
-  .then(function(j){ DATA = j; buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
+  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
   .catch(function(){
     rimGrid.innerHTML = '<p class="empty">Catalogue could not be loaded. Call ' + PHONE_H + ' and we will talk it through.</p>';
     tyreGrid.innerHTML = '<p class="empty">Catalogue could not be loaded. Call ' + PHONE_H + '.</p>';

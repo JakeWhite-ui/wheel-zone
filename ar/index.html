@@ -200,7 +200,32 @@ section{padding-block:clamp(64px,9vw,136px)}
 .chip:hover{border-color:var(--line-lit);color:var(--text)}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 @media(max-width:767px){.chip{height:44px}.filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}}
+/* подбор по автомобилю */
+.picker{border:1px solid var(--line);border-radius:var(--radius);background:var(--ink-2);
+  padding:clamp(20px,2.4vw,28px);margin-bottom:24px}
+.picker-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.picker-hint{color:var(--muted);font-size:var(--fs-small)}
+.picker-row{display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end}
+.picker-row .field{margin-bottom:0}
+.picker-row select{height:52px;padding:0 14px;background:var(--ink);border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--text);width:100%;font-size:16px}
+.picker-row select:focus{border-color:var(--accent);outline:none}
+.picker-row select:disabled{color:var(--dim);background:var(--ink-3);cursor:not-allowed}
+.picker-row .btn{height:52px;min-height:52px}
+@media(max-width:767px){.picker-row{grid-template-columns:1fr}.picker-row .btn{width:100%}}
+.fitment{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--radius);margin:18px 0 0}
+.fitment > div{background:var(--ink);padding:14px 16px}
+.fitment dt{margin:0 0 6px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.fitment dd{margin:0;font-size:17px;color:var(--accent-lit)}
+@media(max-width:639px){.fitment{grid-template-columns:1fr}}
+
 .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:170px;gap:24px;grid-auto-flow:dense}
+.card-fits{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.card-fits b{color:var(--text);font-weight:600}
+.card-spec .soon{color:var(--dim)}
 .card{position:relative;background:var(--ink-3);border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;box-shadow:var(--sh-card);display:flex;flex-direction:column;
   transition:border-color .2s,box-shadow .25s,transform .25s}
@@ -487,25 +512,40 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     <div class="sec-head">
       <div>
         <p class="label" data-rv>01 — الجدار</p>
-        <h2 data-rv>جنوط، بأي تصميم يخطر على بالك</h2>
+        <h2 data-rv>جنوط تناسب سيارتك</h2>
       </div>
-      <p class="lead" data-rv style="max-width:40ch">عملاؤنا قالوها أفضل منا: <a href="#reviews">«تشكيلة الجنوط؟ رهيبة.»</a> رشِّح حسب القطر ونمط الصواميل، ثم اسألنا عن مقاسك.</p>
+      <p class="lead" data-rv style="max-width:40ch">عملاؤنا قالوها أفضل منا: <a href="#reviews">«تشكيلة الجنوط؟ رهيبة.»</a> قل لنا نوع السيارة ونقول لك ما الذي يركّب عليها.</p>
     </div>
 
     <div class="notice" data-rv>
       <span class="mono" style="color:var(--accent-lit)">!</span>
-      <span><b>معاينة الكتالوج.</b> المواصفات أدناه لعرض طريقة الترشيح. قائمة المخزون والأسعار قيد التحميل — اتصل على <a href="tel:+97145762199">04 576 2199</a> وسنخبرك بالضبط بما هو متوفر على الرف اليوم.</span>
+      <span><b>بيانات التركيب هذه مؤكّدة. أما الأسعار والصور فلا.</b> القطر ونمط الصواميل وفتحة المركز أدناه واردة من المحل مباشرة. أما عرض الجنط والإزاحة والسعر فما زالت قيد التجميع، والصور توضيحية — اتصل على <a href="tel:+97145762199">04 576 2199</a> لمعرفة الجنط المحدد والسعر.</span>
     </div>
 
-    <div class="filters" id="rimFilters" role="group" aria-label="ترشيح الجنوط">
-      <button class="chip" aria-pressed="true" data-f="all">الكل</button>
-      <button class="chip" aria-pressed="false" data-f="d17">17&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d18">18&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d19">19&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d20">20&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d21">21&Prime;</button>
-      <button class="chip" aria-pressed="false" data-f="d22">22&Prime;</button>
+    <div class="picker" data-rv>
+      <div class="picker-head">
+        <span class="label">ابحث حسب السيارة</span>
+        <span class="picker-hint">اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.</span>
+      </div>
+      <div class="picker-row">
+        <div class="field">
+          <label class="label" for="pMake">الماركة</label>
+          <select id="pMake"><option value="">كل الماركات</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="pModel">الموديل</label>
+          <select id="pModel" disabled><option value="">كل الموديلات</option></select>
+        </div>
+        <button class="btn btn-ghost" id="pReset" type="button">إعادة تعيين</button>
+      </div>
+      <dl class="fitment" id="fitment" hidden>
+        <div><dt>نمط الصواميل</dt><dd class="mono" id="fPcd">—</dd></div>
+        <div><dt>فتحة المركز</dt><dd class="mono" id="fCb">—</dd></div>
+        <div><dt>المقاسات المتوفرة لدينا</dt><dd class="mono" id="fD">—</dd></div>
+      </dl>
     </div>
+
+    <div class="filters" id="rimFilters" role="group" aria-label="ترشيح الجنوط حسب القطر"></div>
 
     <div class="bento" id="rimGrid"></div>
   </div>
@@ -560,7 +600,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     </div>
 
     <div class="filters" id="tyreFilters" role="group" aria-label="ترشيح الإطارات">
-      <button class="chip" aria-pressed="true" data-u="all">الكل</button>
+      <button class="chip" aria-pressed="true" data-u="all">All</button>
       <button class="chip" aria-pressed="false" data-u="Passenger">ركاب</button>
       <button class="chip" aria-pressed="false" data-u="SUV">دفع رباعي</button>
       <button class="chip" aria-pressed="false" data-u="Performance">أداء عالٍ</button>
@@ -770,16 +810,16 @@ var DATA = null;
 /* Словарь терминов каталога. В английской версии пустой — L() возвращает как есть.
    В /ar/ его подставляет build_ar.py: стиль диска, тип шины и названия услуг приходят
    из catalog.json по-английски, и переводить их надо на отрисовке, а не заменой строк. */
-var TERMS = {"Split-spoke": "قضبان مزدوجة", "Mesh": "شبكي", "Multi-spoke": "متعدد القضبان", "Wire / fine spoke": "قضبان رفيعة", "Twin-spoke": "قضبان ثنائية", "Gloss black / red line": "أسود لامع / خط أحمر", "Bronze": "برونزي", "Hyper silver": "فضي هايبر", "Polished chrome": "كروم مصقول", "Polished face": "واجهة مصقولة", "Satin black": "أسود ساتان", "Machined silver": "فضي مخرّط", "Matte bronze": "برونزي مطفي", "finish": "التشطيب", "width": "العرض", "pcd": "نمط الصواميل", "et": "الإزاحة", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "{style} rim, {finish}": "جنط {style}، {finish}", "{d}&Prime; {style} rim, {pcd}": "جنط {style} مقاس {d}&Prime;، {pcd}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
+var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
 function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] : s; }
 /* Шаблон, а не склейка слов: в арабском существительное идёт перед определением,
    «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
 function tpl(pattern, r){
   return L(pattern)
-    .replace("{style}",  L(r.style))
-    .replace("{finish}", L(r.finish))
-    .replace("{pcd}",    r.pcd)
-    .replace("{d}",      r.diameter);
+    .replace("{d}",    r.d)
+    .replace("{pcd}",  r.pcd)
+    .replace("{cb}",   r.cb)
+    .replace("{fits}", r.fits.map(vehicleName).join(", "));
 }
 
 /* ---------- 0. мелочь ---------- */
@@ -873,7 +913,7 @@ function gateSync(){
 });
 
 /* ---------- 4. каталог ---------- */
-var rimFilter="all", tyreFilter="all";
+var rimFilter="all", tyreFilter="all", pickVehicle="";
 var rimGrid=document.getElementById("rimGrid"), tyreGrid=document.getElementById("tyreGrid");
 
 /* idx — индекс в списке «что вам нужно», а не значение: в /ar/ значения переведены,
@@ -886,29 +926,93 @@ function askFor(text, idx){
   document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
 }
 
+function vehicleName(id){
+  var v = DATA.vehicles.filter(function(x){ return x.id === id; })[0];
+  return v ? v.make + " " + v.model : id;
+}
+
 function renderRims(){
   if(!DATA) return;
   var g = gateRead(), html = "";
   var items = DATA.rims.filter(function(r){
-    if(rimFilter !== "all" && ("d"+r.diameter) !== rimFilter) return false;
-    if(rimFilter === "all" && g.r && r.diameter !== g.r) return false;
+    if(pickVehicle && r.fits.indexOf(pickVehicle) === -1) return false;
+    if(rimFilter !== "all" && ("d"+r.d) !== rimFilter) return false;
+    /* размер из первого экрана фильтрует каталог только пока не выбран автомобиль:
+       явный выбор машины важнее, чем цифра, набранная наверху */
+    if(!pickVehicle && rimFilter === "all" && g.r && r.d !== g.r) return false;
     return true;
   });
   items.forEach(function(r){
+    var fits = r.fits.map(function(id){ return "<b>"+vehicleName(id)+"</b>"; }).join(" · ");
+    var soon = '<span class="soon">'+L("to confirm")+'</span>';
     html += '<article class="card '+r.size+'">'
-      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" alt="'+tpl("{style} rim, {finish}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
-      + '<div class="card-b"><h3>'+r.diameter+'&Prime; '+L(r.style)+'</h3>'
-      + '<div class="card-spec"><span><i>'+L("finish")+'</i> '+L(r.finish)+'</span><span><i>'+L("width")+'</i> '+r.width+'</span>'
-      + '<span><i>'+L("pcd")+'</i> '+r.pcd+'</span><span><i>'+L("et")+'</i> '+r.et+'</span></div>'
+      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" alt="'+tpl("{d}&Prime; rim, {pcd}, fits {fits}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
+      + '<div class="card-b"><h3>'+r.d+'&Prime; &middot; '+r.pcd.replace("x","&times;")+'</h3>'
+      + '<div class="card-spec"><span><i>'+L("cb")+'</i> '+r.cb+' '+L("mm")+'</span>'
+      + '<span><i>'+L("width")+'</i> '+(r.width || soon)+'</span>'
+      + '<span><i>'+L("et")+'</i> '+(r.et || soon)+'</span></div>'
+      + '<div class="card-fits">'+L("Fits")+' '+fits+'</div>'
       + '<div class="card-foot"><span class="price">'+(r.price ? L("AED")+" "+r.price : L("Price on request"))+'</span>'
-      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; {style} rim, {pcd}", r)+'">'+L("Ask us")+'</button></div></div></article>';
+      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; rim, {pcd}, CB {cb} — {fits}", r)+'">'+L("Ask us")+'</button></div></div></article>';
   });
   if(!items.length){
-    html = '<p class="empty">لا يوجد في المعاينة ما يطابق '+(g.r?g.r+'″':'هذا الترشيح')+'. الأرجح أنه متوفر لدينا — اتصل على '+PHONE_H+'.</p>';
+    html = '<p class="empty">'+L("Nothing listed for that combination yet. Call ")+PHONE_H+L(" — the list on this page is only what we have confirmed so far.")+'</p>';
   }
   rimGrid.innerHTML = html;
   sweep(true);
 }
+
+/* ---------- 4a. подбор по автомобилю ---------- */
+var pMake = document.getElementById("pMake"), pModel = document.getElementById("pModel"),
+    fitBox = document.getElementById("fitment");
+
+function buildPicker(){
+  var makes = [];
+  DATA.vehicles.forEach(function(v){ if(makes.indexOf(v.make) === -1) makes.push(v.make); });
+  pMake.innerHTML = '<option value="">'+L("Any make")+'</option>'
+    + makes.map(function(m){ return '<option value="'+m+'">'+m+'</option>'; }).join("");
+  /* чипы диаметров строим из данных, а не хардкодом: клиент пришлёт новые применимости —
+     кнопки появятся сами */
+  var ds = [];
+  DATA.rims.forEach(function(r){ if(ds.indexOf(r.d) === -1) ds.push(r.d); });
+  ds.sort(function(a,b){ return a-b; });
+  document.getElementById("rimFilters").innerHTML =
+    '<button class="chip" aria-pressed="true" data-f="all">'+L("All")+'</button>'
+    + ds.map(function(d){ return '<button class="chip" aria-pressed="false" data-f="d'+d+'">'+d+'&Prime;</button>'; }).join("");
+}
+
+function fillModels(){
+  var make = pMake.value;
+  var list = DATA.vehicles.filter(function(v){ return v.make === make; });
+  pModel.innerHTML = '<option value="">'+L("Any model")+'</option>'
+    + list.map(function(v){ return '<option value="'+v.id+'">'+v.model+'</option>'; }).join("");
+  pModel.disabled = !make;
+}
+
+function applyVehicle(){
+  pickVehicle = pModel.value || "";
+  if(!pickVehicle){ fitBox.hidden = true; }
+  else {
+    var mine = DATA.rims.filter(function(r){ return r.fits.indexOf(pickVehicle) > -1; });
+    document.getElementById("fPcd").innerHTML = mine.length ? mine[0].pcd.replace("x","&times;") : "—";
+    document.getElementById("fCb").textContent = mine.length ? mine[0].cb + " " + L("mm") : "—";
+    document.getElementById("fD").innerHTML = mine.map(function(r){ return r.d+"&Prime;"; })
+      .sort().join(" · ") || "—";
+    fitBox.hidden = false;
+  }
+  /* сброс диаметра: иначе выбрал машину, а на экране пусто из-за старого чипа */
+  rimFilter = "all";
+  var chips = document.querySelectorAll("#rimFilters .chip");
+  for(var i=0;i<chips.length;i++) chips[i].setAttribute("aria-pressed", i === 0 ? "true" : "false");
+  renderRims();
+}
+
+pMake.addEventListener("change", function(){ fillModels(); applyVehicle(); });
+pModel.addEventListener("change", applyVehicle);
+document.getElementById("pReset").addEventListener("click", function(){
+  pMake.value = ""; fillModels(); applyVehicle();
+  gW.value = gP.value = gR.value = ""; gateSync();
+});
 
 function renderTyres(){
   if(!DATA) return;
@@ -923,7 +1027,7 @@ function renderTyres(){
       + '<span class="bt"><span class="price">'+(t.price ? L("AED")+" "+t.price : L("Price on request"))+'</span>'
       + '<button data-item="0" data-ask="'+size+' '+t.load+t.speed+'">'+L("Ask us")+'</button></span></article>';
   });
-  tyreGrid.innerHTML = html || '<p class="empty">No sizes under هذا الترشيح yet.</p>';
+  tyreGrid.innerHTML = html || '<p class="empty">لا توجد مقاسات ضمن هذا الترشيح بعد.</p>';
 }
 
 document.addEventListener("click", function(e){
@@ -1145,7 +1249,7 @@ if(!RM && !matchMedia("(hover: none)").matches){
 /* ---------- 8. старт ---------- */
 fetch("../catalog.json?v=1")
   .then(function(r){ return r.json(); })
-  .then(function(j){ DATA = j; buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
+  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
   .catch(function(){
     rimGrid.innerHTML = '<p class="empty">تعذّر تحميل الكتالوج. اتصل على ' + PHONE_H + ' وسنتحدث في الأمر.</p>';
     tyreGrid.innerHTML = '<p class="empty">تعذّر تحميل الكتالوج. اتصل على ' + PHONE_H + '.</p>';
