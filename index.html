@@ -965,10 +965,16 @@ function applyVehicle(){
   if(!pickVehicle){ fitBox.hidden = true; }
   else {
     var mine = DATA.rims.filter(function(r){ return r.fits.indexOf(pickVehicle) > -1; });
-    document.getElementById("fPcd").innerHTML = mine.length ? mine[0].pcd.replace("x","&times;") : "—";
-    document.getElementById("fCb").textContent = mine.length ? mine[0].cb + " " + L("mm") : "—";
-    document.getElementById("fD").innerHTML = mine.map(function(r){ return r.d+"&Prime;"; })
-      .sort().join(" · ") || "—";
+    /* собираем уникальные значения, а не берём первое попавшееся: если у машины
+       когда-нибудь окажется два разных ЦО, плашка покажет оба, а не соврёт */
+    var uniq = function(a){ var o=[]; a.forEach(function(x){ if(o.indexOf(x)===-1) o.push(x); }); return o; };
+    document.getElementById("fPcd").innerHTML =
+      uniq(mine.map(function(r){ return r.pcd.replace("x","&times;"); })).join(" · ") || "—";
+    document.getElementById("fCb").textContent =
+      uniq(mine.map(function(r){ return r.cb; })).join(" · ") + " " + L("mm");
+    document.getElementById("fD").innerHTML =
+      uniq(mine.map(function(r){ return r.d; })).sort(function(a,b){ return a-b; })
+        .map(function(d){ return d+"&Prime;"; }).join(" · ") || "—";
     fitBox.hidden = false;
   }
   /* сброс диаметра: иначе выбрал машину, а на экране пусто из-за старого чипа */

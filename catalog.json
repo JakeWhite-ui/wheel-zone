@@ -1,5 +1,5 @@
 {
-  "_note": "ПРИМЕНИМОСТИ — реальные данные от Wheel Zone (WhatsApp, 26.10.2026). Диаметр, разболтовка (PCD) и центральное отверстие (CB) взяты из сообщения клиента как есть. ШИРИНА (J), ВЫЛЕТ (ET) и ЦЕНЫ клиентом НЕ присланы — поля оставлены null, сайт честно пишет «уточняется». Фотографии иллюстративные, своих фото магазин пока не дал. Размеры шин в tyres[] — универсальная типоразмерная сетка, НЕ заявление о складе.",
+  "_note": "ПРИМЕНИМОСТИ — реальные данные от Wheel Zone (WhatsApp, 26.10.2026), с правкой клиента от 28.10.2026: у Patrol Y62 центральное отверстие CB78, а не 110 (110 — это Y61), и добавлен Patrol Y63 с CB78. У LC100 CB110, в первом сообщении было «cb1100» — опечатка, подтверждено. ШИРИНА (J), ВЫЛЕТ (ET) и ЦЕНЫ клиентом НЕ присланы — поля оставлены null, сайт честно пишет «уточняется». Фотографии иллюстративные. Размеры шин в tyres[] — универсальная типоразмерная сетка, НЕ заявление о складе.",
   "_pricesPending": true,
   "_photosIllustrative": true,
 
@@ -10,12 +10,13 @@
     { "id": "lc200",         "make": "Toyota", "model": "Land Cruiser 200" },
     { "id": "lc300",         "make": "Toyota", "model": "Land Cruiser 300" },
     { "id": "patrol-y61",    "make": "Nissan", "model": "Patrol Y61" },
-    { "id": "patrol-y62",    "make": "Nissan", "model": "Patrol Y62" }
+    { "id": "patrol-y62",    "make": "Nissan", "model": "Patrol Y62" },
+    { "id": "patrol-y63",    "make": "Nissan", "model": "Patrol Y63" }
   ],
 
   "rims": [
     {
-      "id": "d20-6x139-110", "d": 20, "pcd": "6x139.7", "cb": 110,
+      "id": "d20-6x139-78", "d": 20, "pcd": "6x139.7", "cb": 78,
       "fits": ["patrol-y62"],
       "img": "img/rim-redline.webp", "w": 1600, "h": 2133,
       "size": "big", "width": null, "et": null, "price": null
@@ -27,7 +28,7 @@
       "size": "tall", "width": null, "et": null, "price": null
     },
     {
-      "id": "d18-6x139-110", "d": 18, "pcd": "6x139.7", "cb": 110,
+      "id": "d18-6x139-78", "d": 18, "pcd": "6x139.7", "cb": 78,
       "fits": ["patrol-y62"],
       "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
       "size": "std", "width": null, "et": null, "price": null
@@ -39,26 +40,32 @@
       "size": "std", "width": null, "et": null, "price": null
     },
     {
-      "id": "d17-5x127-71", "d": 17, "pcd": "5x127", "cb": 71,
-      "fits": ["jeep-wrangler"],
+      "id": "d17-6x139-78", "d": 17, "pcd": "6x139.7", "cb": 78,
+      "fits": ["patrol-y62", "patrol-y63"],
       "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
+      "size": "std", "width": null, "et": null, "price": null
+    },
+    {
+      "id": "d17-6x139-110", "d": 17, "pcd": "6x139.7", "cb": 110,
+      "fits": ["patrol-y61"],
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
       "size": "std", "width": null, "et": null, "price": null
     },
     {
       "id": "d17-6x139-95", "d": 17, "pcd": "6x139.7", "cb": 95,
       "fits": ["lc300"],
-      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-6x139-110", "d": 17, "pcd": "6x139.7", "cb": 110,
-      "fits": ["patrol-y61", "patrol-y62"],
       "img": "img/rim-chrome.webp", "w": 1600, "h": 2124,
       "size": "std", "width": null, "et": null, "price": null
     },
     {
       "id": "d17-5x150-110", "d": 17, "pcd": "5x150", "cb": 110,
       "fits": ["lc200"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
+      "size": "std", "width": null, "et": null, "price": null
+    },
+    {
+      "id": "d17-5x127-71", "d": 17, "pcd": "5x127", "cb": 71,
+      "fits": ["jeep-wrangler"],
       "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
       "size": "std", "width": null, "et": null, "price": null
     },
@@ -77,7 +84,7 @@
     {
       "id": "d16-6x139-110", "d": 16, "pcd": "6x139.7", "cb": 110,
       "fits": ["patrol-y61"],
-      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
+      "img": "img/rim-wire.webp", "w": 1600, "h": 2848,
       "size": "std", "width": null, "et": null, "price": null
     }
   ],

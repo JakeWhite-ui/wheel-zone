@@ -111,37 +111,44 @@
 
 ---
 
-## 5a. Применимости дисков — первые реальные данные (WhatsApp, 26.10.2026)
+## 5a. Применимости дисков (WhatsApp 26.10.2026, правка клиента 28.10.2026)
 
-Пришли от клиента. Формат строки: `диаметр · PCD · CB`.
+Формат строки клиента: `диаметр · PCD · CB`. **Это боевые данные, они на сайте.**
 
 | Авто | Диаметры | PCD | CB |
 |---|---|---|---|
 | Jeep Wrangler | 17 | 5×127 | 71 |
 | Jetour T2 | 17, 20 | 5×108 | 60 |
-| Toyota Land Cruiser 100 | 16 | 5×150 | 110 |
+| Toyota Land Cruiser 100 | 16 | 5×150 | 110 ✳ |
 | Toyota Land Cruiser 200 | 17, 18 | 5×150 | 110 |
 | Toyota Land Cruiser 300 | 17 | 6×139.7 | 95 |
 | Nissan Patrol Y61 | 16, 17 | 6×139.7 | 110 |
-| Nissan Patrol Y62 | 17, 18, 20 | 6×139.7 | 110 |
+| Nissan Patrol Y62 | 17, 18, 20 | 6×139.7 | **78** ✳ |
+| Nissan Patrol Y63 | 17 | 6×139.7 | **78** ✳ |
 
-Лежит в `catalog.json` → `vehicles` + `rims`, 11 позиций. На сайте — подбор «по автомобилю»:
-марка → модель → показываются только подходящие диски, плюс плашка PCD / CB / диаметры.
+✳ — исправлено/добавлено клиентом 28.10.2026.
 
-### 🔴 Одно расхождение — проверить у клиента
+Лежит в `catalog.json` → `vehicles` + `rims`, **8 машин, 12 позиций**. На сайте подбор
+«по автомобилю»: марка → модель → только подходящие диски + плашка PCD / CB / диаметры.
 
-**Nissan Patrol Y62: штатное центральное отверстие 78,1 мм, а не 110.**
-110,1 мм — это Y61, предыдущее поколение. Проверено по двум независимым источникам:
-[dynamicwheelco.com.au](https://dynamicwheelco.com.au/vehicle/nissan/patrol-y62/) и
+### ✅ Расхождение закрыто — проверка себя оправдала
+
+26.10 клиент прислал по Y62 `CB110`. Я не стал класть на сайт и сверил: у Y62 штатное
+центральное отверстие **78,1 мм**, 110,1 — это предыдущий Y61. Источники:
+[dynamicwheelco.com.au](https://dynamicwheelco.com.au/vehicle/nissan/patrol-y62/),
 [avtoreference.com](https://avtoreference.com/en/auto/nissan/patrol/2019/).
 
-Значит диски CB110 на Y62 физически садятся, но **только через центровочные кольца**.
-Это не ошибка клиента — так и торгуют, кольца копеечные. Но на сайте об этом
-молчать нельзя: человек купит, приедет и не наденет.
+28.10 клиент подтвердил правку своей рукой: `Nissan Y62 17 6x139 Cb110` → **`Cb78`**,
+дословно «Yes sorry bro». Заодно прислал **новую машину Y63** (тоже CB78) и подтвердил,
+что у LC100 именно `CB110` — в первом сообщении было «cb1100», это опечатка.
 
-**Решение пока:** на сайт расхождение НЕ выведено, в `catalog.json` стоит то, что
-прислал клиент. Как ответит — либо добавляем строку «нужны центровочные кольца 110→78,1»,
-либо правим CB.
+**Вывод на будущее: присланные клиентом числа сверять до публикации, а не после.**
+Ошибка сидела бы на боевом сайте, человек купил бы диск и не надел его на ступицу.
+
+### ⚠️ Не разобрано
+- В переписке два **голосовых по 0:15** — я их не слышал, присланы только скриншотом.
+  Если там есть цифры (ширина, вылет, цены) — нужен текст или пересылка аудио.
+- Клиент сам пишет «Let me know brother if anything missing» — он готов дослать, надо просить.
 
 ### Чего в применимостях НЕТ
 - **Ширина (J) и вылет (ET)** — без них подбор неполный. На карточках стоит «уточняется».
@@ -175,14 +182,16 @@
 
 > Hi! I'm rebuilding the Wheel Zone website from scratch — the current one still has the template's demo contacts and demo reviews on it, so it can't be used as it is. To fill it with your real business I need the following:
 >
-> **The fitment list you sent**
-> 1. Thank you — Wrangler, Jetour T2, LC100/200/300, Patrol Y61 and Y62 are now live on the site as a "find by vehicle" picker. For each of those, I still need the **rim width (J) and the offset (ET)**. Without those two numbers a customer cannot be sure the wheel will clear the brake and sit flush.
-> 2. **One thing to double-check: Nissan Patrol Y62.** You listed CB110. The factory hub bore on the Y62 is 78.1 mm — 110 mm is the older Y61. So a CB110 wheel will fit the Y62 only with centring rings. Is that how you sell it (wheel + rings), or did you mean a different centre bore? I have left your figure on the site untouched until you confirm, but I would rather add a line about the rings than have a customer drive away with a wheel that will not centre.
-> 3. Which other cars can you cover? Seven is a good start, but the more models in the picker, the more people land on the right page.
+> **Your fitment list — it is live**
+> Thank you for the correction on the Y62 and for the Y63. All eight cars are on the site now: pick the make, pick the model, and only the wheels that bolt on are shown. Wrangler, Jetour T2, LC100, LC200, LC300, Patrol Y61, Y62 and Y63.
+>
+> 1. For each of those I still need the **rim width (J) and the offset (ET)**. Those are the last two numbers missing from every card — without them a customer cannot be sure the wheel will clear the brake and sit flush, and right now the site honestly says "to confirm".
+> 2. You sent two voice notes that did not reach me, only the screenshots did. If there were any numbers in them, could you type them out?
+> 3. Which other cars can you cover? Eight is a strong start, and every model you add is another customer landing on exactly the right page.
 >
 > **Stock & pricing**
 > 4. Price list, or at least a price range per fitment — for example "17" 6x139.7 from AED X". Without numbers the site can only say "price on request".
-> 5. Which tyre brands do you actually keep in stock, and what tyre sizes go with each of the cars above (for example 265/70R18 for the Y62)?
+> 5. Which tyre brands do you actually keep in stock, and what tyre sizes go with each of the cars above (for example 275/60R20 for the Y62)?
 > 6. What do you charge for fitting, balancing, alignment, puncture repair, nitrogen and rim repair?
 >
 > **Services**
