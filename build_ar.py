@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Собирает /ar/index.html из index.html: перевод + RTL.
 Запуск: python3 build_ar.py   (из папки wheel-zone)"""
-import os, re, io
+import os, re, io, json
 
 SRC = "index.html"
 OUT = os.path.join("ar", "index.html")
@@ -279,7 +279,14 @@ T = [
  ("Rating and reviews are shown as collected by Google.",
   "التقييم والمراجعات معروضة كما جمعتها جوجل."),
  ('aria-label="Quick contact"', 'aria-label="تواصل سريع"'),
- (">Call us<", ">اتصل بنا<"), (">Get a price<", ">اطلب السعر<"),
+ # нижняя панель: ярлыки короткие, иначе в 1/4 ширины экрана не влезают
+ (">My size<", ">مقاسي<"), (">Call<", ">اتصل<"),
+ # полоска «на домашний экран»
+ (">Wheel Zone on your home screen<", ">ويل زون على شاشتك الرئيسية<"),
+ (">Opens full screen, no browser bar.<", ">يفتح بملء الشاشة دون شريط المتصفح.<"),
+ ('data-ios="Share &rarr; Add to Home Screen."', 'data-ios="مشاركة ← إضافة إلى الشاشة الرئيسية."'),
+ (">Install<", ">تثبيت<"), ('aria-label="Not now"', 'aria-label="ليس الآن"'),
+ ('content="Wheel Zone">', 'content="ويل زون">'),
 
  # --- строки внутри JS ---
  # цена, единицы, «Ask us», стили дисков и услуги идут через L() и словарь TERMS выше.
@@ -313,12 +320,51 @@ T = [
 for a, b in T:
     html = html.replace(a, b)
 
+# Номер в RTL распадается на три прогона и читается «2199 576 04». Изолируем
+# сам номер, а не ссылку целиком: direction:ltr на ссылке разворачивал бы и
+# арабское слово в кнопке «اتصل 04 576 2199»
+BDI = u'<bdi dir="ltr">04 576 2199</bdi>'
+before = html.count("04 576 2199")
+html = html.replace(u">04 576 2199<", u">" + BDI + u"<")
+html = html.replace(u"\u0627\u062a\u0635\u0644 04 576 2199<", u"\u0627\u062a\u0635\u0644 " + BDI + u"<")
+assert html.count(BDI) >= 5, "номер изолирован не везде: %d" % html.count(BDI)
+assert html.count("04 576 2199") == before, "номер потерялся при изоляции" 
+
 # чекбоксы услуг в JS ищем по английскому value — чиним
 html = html.replace("'#svcBox input[value=\"", "'#svcBox input[value=\"")
 
 if not os.path.isdir("ar"):
     os.mkdir("ar")
 io.open(OUT, "w", encoding="utf-8").write(html)
+
+# ---------- 4. манифест и service worker для /ar/ ----------
+# свои копии, а не ссылки на корневые: scope воркера не поднимается выше своей
+# папки без заголовка Service-Worker-Allowed, а GitHub Pages его не шлёт
+mf = io.open("manifest.webmanifest", encoding="utf-8").read()
+mf = (mf.replace('"img/', '"../img/')
+        .replace('"lang": "en"', '"lang": "ar"')
+        .replace('"dir": "ltr"', '"dir": "rtl"')
+        .replace('"name": "Wheel Zone Tyre Trading"',
+                 '"name": "ويل زون لتجارة الاطارات"')
+        .replace('"short_name": "Wheel Zone"', '"short_name": "ويل زون"')
+        .replace('"description": "Rims, tyres and rim repair on 36th Street, Ras Al Khor Industrial Area 2, Dubai."',
+                 '"description": "جنوط وإطارات وإصلاح جنوط في راس الخور الصناعية 2، دبي."')
+        .replace('{ "name": "Rims", "url": "./#rims" }',
+                 '{ "name": "الجنوط", "url": "./#rims" }')
+        .replace('{ "name": "Tyres", "url": "./#tyres" }',
+                 '{ "name": "الإطارات", "url": "./#tyres" }')
+        .replace('{ "name": "My tyre size", "url": "./#calc" }',
+                 '{ "name": "مقاسي", "url": "./#calc" }'))
+assert '"../img/icon-192' in mf, "иконки манифеста не перепривязаны"
+json.loads(mf)
+io.open(os.path.join("ar", "manifest.webmanifest"), "w", encoding="utf-8").write(mf)
+
+sw = io.open("sw.js", encoding="utf-8").read()
+assert 'var V = "wz-en-v2";' in sw, "имя кэша в sw.js изменилось"
+sw = sw.replace('var V = "wz-en-v2";', 'var V = "wz-ar-v2";')
+sw = sw.replace('"./catalog.json?v=1"', '"../catalog.json?v=1"')
+io.open(os.path.join("ar", "sw.js"), "w", encoding="utf-8").write(sw)
+print("written: ar/manifest.webmanifest, ar/sw.js")
 
 # контроль: не осталось ли длинных английских фраз в видимом тексте
 leftovers = re.findall(r'>([A-Z][a-z]{2,}[^<>{}]{14,})<', html)

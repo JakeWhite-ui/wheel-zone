@@ -17,6 +17,11 @@
 <meta name="theme-color" content="#0B0E12">
 <link rel="icon" href="../img/favicon.png?v=2" sizes="any">
 <link rel="apple-touch-icon" href="../img/favicon.png?v=2">
+<link rel="manifest" href="manifest.webmanifest?v=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ويل زون">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -455,11 +460,63 @@ section{padding-block:clamp(52px,9vw,136px)}
 .ftr .ar{font-family:"Cairo","Archivo",sans-serif;color:var(--muted);font-size:var(--fs-small);direction:rtl}
 .ftr small{color:var(--dim);font-size:13px;display:block;margin-top:14px;max-width:46ch;line-height:1.6}
 @media(min-width:768px){.ftr{padding-bottom:48px}}
-.mbar{position:fixed;inset:auto 0 0 0;z-index:60;display:none;gap:1px;background:var(--line);border-top:1px solid var(--line)}
-.mbar a{flex:1;height:56px;display:flex;align-items:center;justify-content:center;gap:8px;border:0;
-  background:var(--ink-2);color:var(--text);font-weight:700;font-size:15px}
-.mbar a.pri{background:var(--accent);color:#fff}
-@media(max-width:767px){.mbar{display:flex}}
+/* Нижняя панель — главный навигатор на телефоне. Страница длинная, и прыжок
+   в раздел одним пальцем заменяет прокрутку на 11 000 px. Четвёртая кнопка —
+   действие, а не раздел, поэтому залита акцентом. */
+.mbar{position:fixed;inset:auto 0 0 0;z-index:60;display:none;
+  background:rgba(17,21,27,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);
+  -webkit-user-select:none;user-select:none}
+.mbar-in{display:grid;grid-template-columns:repeat(4,1fr)}
+.mbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  height:58px;border:0;color:var(--dim);font-size:10px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;line-height:1;transition:color .15s,background .12s}
+.mbar svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.mbar a.on{color:var(--accent-lit)}
+.mbar a.act{color:#fff;background:var(--accent)}
+.mbar a.act:active{background:#04689F}
+@media(max-width:767px){.mbar{display:block}}
+
+/* Полоска «на домашний экран». Показывается один раз и закрывается навсегда:
+   жить с баннером, который возвращается каждый визит, нельзя. */
+.inst{position:fixed;left:0;right:0;z-index:59;display:none;align-items:center;gap:12px;
+  bottom:calc(59px + env(safe-area-inset-bottom,0px));
+  background:var(--ink-3);border-top:1px solid var(--line);padding:10px var(--pad)}
+.inst.show{display:flex}
+.inst img{width:36px;height:36px;border-radius:8px;flex:none;border:1px solid var(--line)}
+.inst p{flex:1;min-width:0;font-size:12.5px;line-height:1.35;color:var(--muted)}
+.inst b{display:block;color:var(--text);font-size:13.5px;line-height:1.3}
+.inst button{flex:none;min-height:38px;padding:0 14px;border-radius:var(--radius);
+  border:1px solid var(--accent);background:var(--accent);color:#fff;font-weight:700;
+  font-size:13px;cursor:pointer}
+.inst .x{background:none;border:0;color:var(--dim);font-size:22px;padding:0;min-width:34px;min-height:38px}
+@media(min-width:768px){.inst{display:none!important}}
+
+/* ============ ОБОЛОЧКА ПРИЛОЖЕНИЯ ============
+   viewport-fit=cover + чёрно-прозрачный статус-бар: с домашнего экрана контент
+   уходит под часы, поэтому верхнюю отбивку берём у устройства, а не константой. */
+.hdr{height:calc(78px + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+@media(max-width:1023px){.nav{top:calc(78px + env(safe-area-inset-top,0px))}}
+@media(max-width:767px){
+  .hdr{height:calc(68px + env(safe-area-inset-top,0px))}
+  .nav{top:calc(68px + env(safe-area-inset-top,0px))}
+  .ftr{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
+  /* полоска «на домашний экран» живёт НАД панелью и накрывала копирайт */
+  body.has-inst .ftr{padding-bottom:calc(192px + env(safe-area-inset-bottom,0px))}
+}
+/* В отдельном окне браузерной обвязки нет — шапке незачем быть прозрачной */
+@media(display-mode:standalone){.hdr{background:rgba(11,14,18,.96);border-bottom-color:var(--line)}}
+
+/* Прыжок по якорю из нижней панели не должен прятать заголовок под шапку */
+section[id]{scroll-margin-top:calc(90px + env(safe-area-inset-top,0px))}
+@media(max-width:767px){section[id]{scroll-margin-top:calc(80px + env(safe-area-inset-top,0px))}}
+
+/* Тач: убираем задержку 300 мс на двойной тап и серый прямоугольник подсветки;
+   у боковых лент — свой overscroll, иначе свайп в конце ленты уводит страницу назад */
+a,button,select,input,label,summary{touch-action:manipulation}
+html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
+.filters,.rev,.cols3{overscroll-behavior-x:contain}
 .skip{position:absolute;left:-9999px}
 .skip:focus{left:var(--pad);top:12px;z-index:99;background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius)}
 
@@ -511,7 +568,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
       <a href="#visit">زورونا</a>
       <a href="../">English</a>
     </nav>
-    <a class="btn" href="tel:+97145762199">اتصل 04 576 2199</a>
+    <a class="btn" href="tel:+97145762199">اتصل <bdi dir="ltr">04 576 2199</bdi></a>
     <button class="burger" id="burger" aria-label="القائمة" aria-expanded="false" aria-controls="nav"><span></span></button>
   </div>
 </header>
@@ -560,16 +617,6 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
   </div>
 </section>
 
-<!-- ============ 2. TICKER + PROOF ============ -->
-<section class="band" style="padding-block:0" aria-label="المواصفات والأرقام">
-  <div class="ticker" id="ticker" aria-hidden="true"><div class="ticker-row" id="tickerRow"></div></div>
-  <div class="proof">
-    <div data-rv><div class="n" data-count="4.4">4.4<span>★</span></div><p class="c">التقييم على جوجل، جمعته جوجل من عملاء حقيقيين.</p></div>
-    <div data-rv><div class="n" data-count="40">40</div><p class="c">تقييماً على صفحتنا في جوجل. افتتحنا حديثاً — وكل تقييم منها مُستحق.</p></div>
-    <div data-rv><div class="n mono">23:00</div><p class="c">نغلق الساعة 23:00. اصطدم جنطك بالرصيف في طريق العودة من العمل؟ لا يزال لديك وقت.</p></div>
-  </div>
-</section>
-
 <!-- ============ 3. RIMS — bento ============ -->
 <section id="rims">
   <div class="wrap">
@@ -583,7 +630,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 
     <div class="notice" data-rv>
       <span class="mono" style="color:var(--accent-lit)">!</span>
-      <span><b>بيانات التركيب هذه مؤكّدة. أما الأسعار والصور فلا.</b> القطر ونمط الصواميل وفتحة المركز أدناه واردة من المحل مباشرة. أما عرض الجنط والإزاحة والسعر فما زالت قيد التجميع، والصور توضيحية — اتصل على <a href="tel:+97145762199">04 576 2199</a> لمعرفة الجنط المحدد والسعر.</span>
+      <span><b>بيانات التركيب هذه مؤكّدة. أما الأسعار والصور فلا.</b> القطر ونمط الصواميل وفتحة المركز أدناه واردة من المحل مباشرة. أما عرض الجنط والإزاحة والسعر فما زالت قيد التجميع، والصور توضيحية — اتصل على <a href="tel:+97145762199"><bdi dir="ltr">04 576 2199</bdi></a> لمعرفة الجنط المحدد والسعر.</span>
     </div>
 
     <div class="picker" data-rv>
@@ -631,7 +678,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
           <li><span class="mono">03</span><span>نُصلحها، أو نركّب بديلاً من الجدار — القرار لك، لا لنا.</span></li>
         </ul>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px">
-          <a class="btn" href="tel:+97145762199">اتصل 04 576 2199</a>
+          <a class="btn" href="tel:+97145762199">اتصل <bdi dir="ltr">04 576 2199</bdi></a>
           <a class="btn btn-ghost" href="#visit">اعثر علينا في راس الخور</a>
         </div>
       </div>
@@ -661,7 +708,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 
     <div class="notice" data-rv>
       <span class="mono" style="color:#04689F">!</span>
-      <span><b>الأسعار قيد التحميل.</b> الماركات والأسعار تأتي مباشرة من قائمة مخزون المحل. حتى ذلك الحين، كل مقاس هنا بسعر عند الطلب — اتصل على <a href="tel:+97145762199">04 576 2199</a> وستحصل على الرقم خلال دقيقة.</span>
+      <span><b>الأسعار قيد التحميل.</b> الماركات والأسعار تأتي مباشرة من قائمة مخزون المحل. حتى ذلك الحين، كل مقاس هنا بسعر عند الطلب — اتصل على <a href="tel:+97145762199"><bdi dir="ltr">04 576 2199</bdi></a> وستحصل على الرقم خلال دقيقة.</span>
     </div>
 
     <div class="filters" id="tyreFilters" role="group" aria-label="ترشيح الإطارات">
@@ -812,7 +859,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     </div>
     <dl class="info" data-rv>
       <div><dt>العنوان</dt><dd>36TH STREET - Ras Al Khor - Ras Al Khor Industrial Area 2 - Dubai</dd></div>
-      <div><dt>الهاتف</dt><dd><a href="tel:+97145762199">04 576 2199</a></dd></div>
+      <div><dt>الهاتف</dt><dd><a href="tel:+97145762199"><bdi dir="ltr">04 576 2199</bdi></a></dd></div>
       <div><dt>رمز Plus</dt><dd class="mono">59J9+C8 Dubai</dd></div>
       <div><dt>وقت الإغلاق</dt><dd>23:00</dd></div>
       <div><dt>جوجل</dt><dd>4.4 ★ من 40 تقييماً</dd></div>
@@ -822,6 +869,16 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
       <iframe title="ويل زون لتجارة الاطارات على الخريطة" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
         src="https://www.openstreetmap.org/export/embed.html?bbox=55.335%2C25.175%2C55.355%2C25.192&amp;layer=mapnik"></iframe>
     </div>
+  </div>
+</section>
+
+<!-- ============ ХВОСТ: бегущая строка + цифры ============ -->
+<section class="band" style="padding-block:0" aria-label="المواصفات والأرقام">
+  <div class="ticker" id="ticker" aria-hidden="true"><div class="ticker-row" id="tickerRow"></div></div>
+  <div class="proof">
+    <div data-rv><div class="n" data-count="4.4">4.4<span>★</span></div><p class="c">التقييم على جوجل، جمعته جوجل من عملاء حقيقيين.</p></div>
+    <div data-rv><div class="n" data-count="40">40</div><p class="c">تقييماً على صفحتنا في جوجل. افتتحنا حديثاً — وكل تقييم منها مُستحق.</p></div>
+    <div data-rv><div class="n mono">23:00</div><p class="c">نغلق الساعة 23:00. اصطدم جنطك بالرصيف في طريق العودة من العمل؟ لا يزال لديك وقت.</p></div>
   </div>
 </section>
 
@@ -836,16 +893,27 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     </div>
     <div>
       <p class="label" style="margin-bottom:12px">تواصل معنا</p>
-      <p><a href="tel:+97145762199">04 576 2199</a></p>
+      <p><a href="tel:+97145762199"><bdi dir="ltr">04 576 2199</bdi></a></p>
       <p style="margin-top:8px"><a href="../">English version</a></p>
       <small>&copy; <span id="yr">2026</span> Wheel Zone Tyre Trading. التقييم والمراجعات معروضة كما جمعتها جوجل.</small>
     </div>
   </div>
 </footer>
 
+<div class="inst" id="inst">
+  <img src="../img/icon-192.png?v=1" alt="" width="36" height="36">
+  <p><b>ويل زون على شاشتك الرئيسية</b><span id="instTip" data-ios="مشاركة ← إضافة إلى الشاشة الرئيسية.">يفتح بملء الشاشة دون شريط المتصفح.</span></p>
+  <button type="button" id="instGo">تثبيت</button>
+  <button type="button" class="x" id="instNo" aria-label="ليس الآن">&times;</button>
+</div>
+
 <nav class="mbar" aria-label="تواصل سريع">
-  <a class="pri" href="tel:+97145762199">اتصل بنا</a>
-  <a href="#calc">اطلب السعر</a>
+  <div class="mbar-in">
+    <a href="#rims"  data-spy="rims"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3v6.4M12 14.6V21M3 12h6.4M14.6 12H21"/></svg><span>الجنوط</span></a>
+    <a href="#tyres" data-spy="tyres"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/><path d="M12 3v1.8M12 19.2V21M3 12h1.8M19.2 12H21M5.64 5.64l1.27 1.27M17.09 17.09l1.27 1.27M18.36 5.64l-1.27 1.27M6.91 17.09l-1.27 1.27"/></svg><span>الإطارات</span></a>
+    <a href="#calc"  data-spy="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11.5h.01M12 11.5h.01M16 11.5h.01M8 15.5h.01M12 15.5h.01M16 15.5h.01M8 19h.01M12 19h.01M16 19h.01"/></svg><span>مقاسي</span></a>
+    <a class="act" href="tel:+97145762199"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.9v2.8a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.5-3 19.3 19.3 0 0 1-6-6 19.6 19.6 0 0 1-3-8.6A2 2 0 0 1 3.3 2h2.8a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L7.2 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg><span>اتصل</span></a>
+  </div>
 </nav>
 
 <script type="application/ld+json">
@@ -1316,6 +1384,12 @@ var hdr = document.getElementById("hdr"),
     ticker = document.getElementById("ticker");
 var queued = false, mx = 0, my = 0, hoverCard = null, lastY = -1;
 
+/* Активная вкладка нижней панели. Считаем в том же обходе, что и всё остальное:
+   отдельный слушатель скролла плодил бы второй источник правды о позиции. */
+var spy = [].map.call(document.querySelectorAll(".mbar a[data-spy]"), function(a){
+  return { tab: a, sec: document.getElementById(a.getAttribute("data-spy")) };
+}).filter(function(x){ return x.sec; });
+
 function countUp(el){
   var target = parseFloat(el.dataset.count),
       dec = el.dataset.count.indexOf(".") > -1 ? 1 : 0,
@@ -1341,6 +1415,13 @@ function sweep(force){
       var tr = ticker.getBoundingClientRect();
       ticker.classList.toggle("paused", tr.bottom < 0 || tr.top > vh);
     }
+    var cur = null;
+    for(var s = 0; s < spy.length; s++){
+      var sr = spy[s].sec.getBoundingClientRect();
+      /* секция считается текущей, когда её пересекает линия в 40% высоты экрана */
+      if(sr.top <= vh * 0.4 && sr.bottom > vh * 0.4) cur = spy[s];
+    }
+    for(var s2 = 0; s2 < spy.length; s2++) spy[s2].tab.classList.toggle("on", spy[s2] === cur);
   }
 
   var els = document.querySelectorAll("[data-rv]:not(.in)"), n = 0;
@@ -1392,6 +1473,43 @@ fetch("../catalog.json?v=1")
 setQty(1);
 sweep(true);
 addEventListener("load", function(){ lastY = -1; sweep(true); });
+
+/* ---------- 9. ДОМАШНИЙ ЭКРАН ---------- */
+var inst = document.getElementById("inst"), instGo = document.getElementById("instGo"),
+    instNo = document.getElementById("instNo"), instTip = document.getElementById("instTip"),
+    deferred = null;
+var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+function instSeen(){ try{ return localStorage.getItem("wz_inst") === "0"; }catch(e){ return true; } }
+function instOn(){ inst.classList.add("show"); document.body.classList.add("has-inst"); }
+function instOff(){
+  inst.classList.remove("show");
+  document.body.classList.remove("has-inst");
+  try{ localStorage.setItem("wz_inst","0"); }catch(e){}
+}
+addEventListener("beforeinstallprompt", function(e){
+  e.preventDefault(); deferred = e;
+  if(!standalone && !instSeen()) instOn();
+});
+instGo.addEventListener("click", function(){
+  if(!deferred){ instOff(); return; }
+  deferred.prompt(); deferred = null; instOff();
+});
+instNo.addEventListener("click", instOff);
+/* Safari не шлёт beforeinstallprompt — на iPhone кнопки нет, только куда нажать */
+if(!standalone && !instSeen()
+   && /iP(hone|ad|od)/.test(navigator.userAgent)
+   && !/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent)){
+  instGo.hidden = true;
+  instTip.textContent = instTip.getAttribute("data-ios");
+  setTimeout(instOn, 2600);
+}
+
+/* ---------- 10. ОФЛАЙН-ОБОЛОЧКА ---------- */
+if("serviceWorker" in navigator){
+  addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js?v=1").catch(function(){});
+  });
+}
 })();
 </script>
 </body>
