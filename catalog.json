@@ -1,92 +1,130 @@
 {
-  "_note": "ПРИМЕНИМОСТИ — реальные данные от Wheel Zone (WhatsApp, 26.10.2026), с правкой клиента от 28.10.2026: у Patrol Y62 центральное отверстие CB78, а не 110 (110 — это Y61), и добавлен Patrol Y63 с CB78. У LC100 CB110, в первом сообщении было «cb1100» — опечатка, подтверждено. ШИРИНА (J), ВЫЛЕТ (ET) и ЦЕНЫ клиентом НЕ присланы — поля оставлены null, сайт честно пишет «уточняется». Фотографии иллюстративные. Размеры шин в tyres[] — универсальная типоразмерная сетка, НЕ заявление о складе.",
+  "_note": "ПРИМЕНИМОСТИ — боевые данные Wheel Zone. Полный список 15.10.2026, дополнение 26.10.2026 (Wrangler, Jetour T2, LC100), правка 28.10.2026 (Y62 и Y63 = CB78, а не 110 — клиент подтвердил «Yes sorry bro»; у LC100 CB110, «cb1100» было опечаткой). Два места прочитаны как опечатки и ждут подтверждения: «Ls570» → Lexus LX 570 (машины LS570 не существует, а 5x150/CB110 это ровно LX570), и «Gmc» без модели. ШИРИНА (J), ВЫЛЕТ (ET) и ЦЕНЫ клиентом НЕ присланы — null, сайт пишет «уточняется». Фото иллюстративные. tyres[] — универсальная типоразмерная сетка, НЕ заявление о складе.",
   "_pricesPending": true,
   "_photosIllustrative": true,
 
   "vehicles": [
+    { "id": "ram",           "make": "Dodge",  "model": "Ram" },
+    { "id": "f150",          "make": "Ford",   "model": "F-150" },
+    { "id": "gmc",           "make": "GMC",    "model": "— model to confirm" },
     { "id": "jeep-wrangler", "make": "Jeep",   "model": "Wrangler" },
     { "id": "jetour-t2",     "make": "Jetour", "model": "T2" },
-    { "id": "lc100",         "make": "Toyota", "model": "Land Cruiser 100" },
-    { "id": "lc200",         "make": "Toyota", "model": "Land Cruiser 200" },
-    { "id": "lc300",         "make": "Toyota", "model": "Land Cruiser 300" },
+    { "id": "lx570",         "make": "Lexus",  "model": "LX 570" },
     { "id": "patrol-y61",    "make": "Nissan", "model": "Patrol Y61" },
     { "id": "patrol-y62",    "make": "Nissan", "model": "Patrol Y62" },
-    { "id": "patrol-y63",    "make": "Nissan", "model": "Patrol Y63" }
+    { "id": "patrol-y63",    "make": "Nissan", "model": "Patrol Y63" },
+    { "id": "xterra",        "make": "Nissan", "model": "Xterra" },
+    { "id": "jimny",         "make": "Suzuki", "model": "Jimny" },
+    { "id": "lc100",         "make": "Toyota", "model": "Land Cruiser 100" },
+    { "id": "lc200",         "make": "Toyota", "model": "Land Cruiser 200" },
+    { "id": "lc300",         "make": "Toyota", "model": "Land Cruiser 300" }
   ],
 
   "rims": [
-    {
-      "id": "d20-6x139-78", "d": 20, "pcd": "6x139.7", "cb": 78,
-      "fits": ["patrol-y62"],
-      "img": "img/rim-redline.webp", "w": 1600, "h": 2133,
-      "size": "big", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d20-5x108-60", "d": 20, "pcd": "5x108", "cb": 60,
+    { "id": "d20-6x139-78",  "d": 20, "pcd": "6x139.7", "cb": 78,
+      "fits": ["patrol-y62", "patrol-y63", "gmc"],
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133, "size": "big",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d20-5x150-110", "d": 20, "pcd": "5x150", "cb": 110,
+      "fits": ["lx570"],
+      "img": "img/rim-wire.webp", "w": 1600, "h": 2848, "size": "tall",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d20-6x135-87",  "d": 20, "pcd": "6x135", "cb": 87,
+      "fits": ["f150"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124, "size": "tall",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d20-5x108-60",  "d": 20, "pcd": "5x108", "cb": 60,
       "fits": ["jetour-t2"],
-      "img": "img/rim-wire.webp", "w": 1600, "h": 2848,
-      "size": "tall", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d18-6x139-78", "d": 18, "pcd": "6x139.7", "cb": 78,
-      "fits": ["patrol-y62"],
-      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d18-5x150-110", "d": 18, "pcd": "5x150", "cb": 110,
-      "fits": ["lc200"],
-      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-6x139-78", "d": 17, "pcd": "6x139.7", "cb": 78,
-      "fits": ["patrol-y62", "patrol-y63"],
-      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-6x139-110", "d": 17, "pcd": "6x139.7", "cb": 110,
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d18-6x139-78",  "d": 18, "pcd": "6x139.7", "cb": 78,
+      "fits": ["patrol-y62", "patrol-y63", "gmc"],
+      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d18-5x150-110", "d": 18, "pcd": "5x150", "cb": 110,
+      "fits": ["lc200", "lx570"],
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d18-6x135-87",  "d": 18, "pcd": "6x135", "cb": 87,
+      "fits": ["f150"],
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d18-5x139-77",  "d": 18, "pcd": "5x139.7", "cb": 77,
+      "fits": ["ram"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-6x139-78",  "d": 17, "pcd": "6x139.7", "cb": 78,
+      "fits": ["patrol-y62", "patrol-y63", "gmc"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-6x139-110", "d": 17, "pcd": "6x139.7", "cb": 110,
       "fits": ["patrol-y61"],
-      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-6x139-95", "d": 17, "pcd": "6x139.7", "cb": 95,
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-6x139-95",  "d": 17, "pcd": "6x139.7", "cb": 95,
       "fits": ["lc300"],
-      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-5x150-110", "d": 17, "pcd": "5x150", "cb": 110,
-      "fits": ["lc200"],
-      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-5x127-71", "d": 17, "pcd": "5x127", "cb": 71,
+      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-5x150-110", "d": 17, "pcd": "5x150", "cb": 110,
+      "fits": ["lc200", "lx570"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-5x127-71",  "d": 17, "pcd": "5x127", "cb": 71,
       "fits": ["jeep-wrangler"],
-      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d17-5x108-60", "d": 17, "pcd": "5x108", "cb": 60,
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-5x108-60",  "d": 17, "pcd": "5x108", "cb": 60,
       "fits": ["jetour-t2"],
-      "img": "img/rim-redline.webp", "w": 1600, "h": 2133,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d16-5x150-110", "d": 16, "pcd": "5x150", "cb": 110,
+      "img": "img/rim-wire.webp", "w": 1600, "h": 2848, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-6x135-87",  "d": 17, "pcd": "6x135", "cb": 87,
+      "fits": ["f150"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d17-5x139-77",  "d": 17, "pcd": "5x139.7", "cb": 77,
+      "fits": ["ram"],
+      "img": "img/rim-caliper.webp", "w": 1600, "h": 2416, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d16-5x150-110", "d": 16, "pcd": "5x150", "cb": 110,
       "fits": ["lc100"],
-      "img": "img/rim-dark.webp", "w": 1600, "h": 2400,
-      "size": "std", "width": null, "et": null, "price": null
-    },
-    {
-      "id": "d16-6x139-110", "d": 16, "pcd": "6x139.7", "cb": 110,
+      "img": "img/rim-dark.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d16-6x139-110", "d": 16, "pcd": "6x139.7", "cb": 110,
       "fits": ["patrol-y61"],
-      "img": "img/rim-wire.webp", "w": 1600, "h": 2848,
-      "size": "std", "width": null, "et": null, "price": null
-    }
+      "img": "img/rim-wire.webp", "w": 1600, "h": 2848, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d16-6x114-66",  "d": 16, "pcd": "6x114.3", "cb": 66,
+      "fits": ["xterra"],
+      "img": "img/rim-chrome.webp", "w": 1600, "h": 2124, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d16-5x139-108", "d": 16, "pcd": "5x139.7", "cb": 108,
+      "fits": ["jimny"],
+      "img": "img/rim-redline.webp", "w": 1600, "h": 2133, "size": "std",
+      "width": null, "et": null, "price": null },
+
+    { "id": "d15-5x139-108", "d": 15, "pcd": "5x139.7", "cb": 108,
+      "fits": ["jimny"],
+      "img": "img/rim-bronze.webp", "w": 1600, "h": 2400, "size": "std",
+      "width": null, "et": null, "price": null }
   ],
 
   "tyres": [

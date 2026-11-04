@@ -25,6 +25,7 @@ TERMS = {
   "width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز",
   "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي",
   "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً",
+  "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً",
   # подбор по автомобилю
   "Find by vehicle": "ابحث حسب السيارة",
   "Pick your car and we show only the rims that bolt on.":
@@ -33,6 +34,11 @@ TERMS = {
   "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل",
   "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز",
   "Diameters we list": "المقاسات المتوفرة لدينا",
+  # мобильная раскладка
+  "Show fewer": "عرض أقل",
+  "Show all {n} rims": "عرض كل الجنوط ({n})",
+  "Show all {n} sizes": "عرض كل المقاسات ({n})",
+  "— model to confirm": "— الموديل قيد التأكيد",
   "Nothing listed for that combination yet. Call ":
     "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ",
   " — the list on this page is only what we have confirmed so far.":
@@ -58,7 +64,8 @@ assert "var TERMS = window.WZ_TERMS || {};" in html, "крючок L() проп�
 html = html.replace("var TERMS = window.WZ_TERMS || {};", _terms_js)
 html = html.replace('content="https://tirez.ae/img/', 'content="https://tirez.ae/img/')
 html = html.replace('fetch("catalog.json?v=1")', 'fetch("../catalog.json?v=1")')
-html = html.replace("""+r.img+'?v=1" alt=""", """+"../"+r.img+'?v=1" alt=""")
+# якорь без того, что идёт ПОСЛЕ ?v=1: любой новый атрибут у <img> ломал замену
+html = html.replace("""+r.img+'?v=1\"""", """+"../"+r.img+'?v=1\"""")
 assert '"../"+r.img' in html, "путь к картинкам каталога не переписан"
 html = html.replace('href="ar/"', 'href="../"')
 html = html.replace('"url":"https://tirez.ae/"', '"url":"https://tirez.ae/ar/"')
@@ -213,6 +220,11 @@ T = [
  ("On the explanation", "على الشرح"),
  ("You will be told what is wrong with the wheel and why, before any work starts. No surprises on the invoice.",
   "سنخبرك بما في العجلة من عيب ولماذا، قبل بدء أي عمل. لا مفاجآت في الفاتورة."),
+
+ # --- вкладки калькулятора (мобильная раскладка) ---
+ ('aria-label="Calculator sections"', 'aria-label="أقسام الحاسبة"'),
+ ('>Read my size<', '>اقرأ مقاسي<'),
+ ('>Build request<', '>جهّز الطلب<'),
 
  # --- calculator ---
  ("05 — The numbers", "05 — الأرقام"),

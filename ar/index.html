@@ -57,6 +57,10 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 img{display:block;max-width:100%;height:auto}
+/* У браузера [hidden]{display:none} — правило нулевой специфичности, и любой
+   наш .fitment{display:grid} его перебивает: элемент с hidden остаётся на экране.
+   Проверка через el.hidden этого не видит, нужен computed display. */
+[hidden]{display:none!important}
 a{color:var(--accent-lit);text-decoration:none;border-bottom:1px solid var(--accent-dim);transition:border-color .18s}
 a:hover{border-bottom-color:var(--accent-lit)}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent-lit);outline-offset:3px}
@@ -66,7 +70,7 @@ h2{font-size:var(--fs-h2)} h3{font-size:var(--fs-h3);line-height:1.15}
 p{margin:0}
 .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variation-settings:normal}
 .wrap{max-width:var(--container);margin-inline:auto;padding-inline:var(--pad)}
-section{padding-block:clamp(64px,9vw,136px)}
+section{padding-block:clamp(52px,9vw,136px)}
 .label{font-size:var(--fs-label);text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:700;font-family:"JetBrains Mono",monospace}
 .lead{color:var(--muted);max-width:58ch}
 
@@ -188,6 +192,7 @@ section{padding-block:clamp(64px,9vw,136px)}
 
 /* ============ CATALOGUE — bento ============ */
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+@media(max-width:639px){.sec-head{gap:14px;margin-bottom:26px}}
 .sec-head h2{max-width:14ch}
 .notice{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:2px solid var(--accent);
   background:var(--ink-2);padding:16px 20px;border-radius:var(--radius);color:var(--muted);
@@ -259,20 +264,46 @@ section{padding-block:clamp(64px,9vw,136px)}
   .card.tall{grid-column:span 3;grid-row:span 4} .card.std{grid-column:span 3;grid-row:span 2}
 }
 @media(max-width:639px){
-  .bento{grid-template-columns:1fr;grid-auto-rows:auto}
+  /* 21 карточка в столбик вертикальными плитками = ~10 000px скролла.
+     Первая остаётся большой ради удара, остальные ложатся строками с миниатюрой. */
+  .bento{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
   .card{grid-column:1/-1!important;grid-row:auto!important}
-  .card-ph{aspect-ratio:1/1;flex:none}
-  .card.big .card-ph{aspect-ratio:4/5}
-  .card.wide .card-ph{aspect-ratio:16/10}
+  .card.big{flex-direction:column}
+  .card.big .card-ph{aspect-ratio:1/1;flex:none}
+  .card:not(.big){flex-direction:row}
+  .card:not(.big) .card-ph{flex:0 0 108px;min-height:130px;aspect-ratio:auto}
+  .card:not(.big) .card-b{flex:1;min-width:0;border-top:0;
+    border-inline-start:1px solid var(--line);padding:12px 14px 14px}
+  .card:not(.big) .card-b h3{font-size:16px}
+  .card:not(.big) .card-spec{margin-top:6px;gap:4px 10px;font-size:12px}
+  .card:not(.big) .card-fits{margin-top:8px;padding-top:8px;font-size:12px}
+  .card:not(.big) .card-foot{margin-top:10px;gap:10px}
+  .card:not(.big) .card-ask{height:44px;padding:0 12px;font-size:13px;white-space:nowrap}
+  .card:not(.big) .price{font-size:12.5px}
+  /* плейсхолдеры «до/после» рядом, но без жёсткой пропорции */
+  .ph-slot{aspect-ratio:auto;min-height:118px;padding:18px 12px;font-size:12px}
+}
+
+/* «показать все» — только на телефоне, на десктопе стена видна целиком */
+.more-wrap{display:none;margin-top:16px}
+.more-wrap .btn{width:100%}
+@media(max-width:639px){
+  .more-wrap{display:block}
+  .bento:not(.is-open) .card:nth-child(n+7){display:none}
+  .tgrid:not(.is-open) .trow:nth-child(n+7){display:none}
 }
 
 /* ============ 4. RIM REPAIR ============ */
 .repair{background:var(--ink-2);border-block:1px solid var(--line)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:center}
+/* без min-width:0 автоминимум грид-элемента считается по содержимому, а у .ph-slot
+   есть aspect-ratio: текст переносится -> высота растёт -> пропорция тянет ширину
+   обратно, и колонка распухает до 741px, ломая страницу вбок */
+.split > *{min-width:0}
 @media(max-width:899px){.split{grid-template-columns:1fr;gap:40px}}
 .repair-ph{position:relative;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2}
 .repair-ph img{width:100%;height:100%;object-fit:cover}
-.ph-slot{display:grid;place-items:center;text-align:center;gap:8px;border:1px dashed var(--line-lit);
+.ph-slot{min-width:0;display:grid;place-items:center;text-align:center;gap:8px;border:1px dashed var(--line-lit);
   border-radius:var(--radius);background:var(--ink-3);color:var(--dim);padding:28px 20px;aspect-ratio:3/2;
   font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.5}
 .ph-slot b{color:var(--muted);font-weight:400;display:block}
@@ -307,6 +338,13 @@ section{padding-block:clamp(64px,9vw,136px)}
   font-size:14px;cursor:pointer;transition:.15s;flex:none;color:var(--paper-ink)}
 .trow button:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .trow.hit{border-color:var(--accent);box-shadow:var(--glow)}
+@media(max-width:639px){
+  .trow{padding:14px 16px;gap:8px}
+  .trow .sz{font-size:19px}
+  .trow .mi{font-size:12px;gap:4px 10px}
+  .trow .bt{padding-top:10px}
+  .trow button{height:44px;font-size:13px}
+}
 
 /* ============ 6. WARRANTY ============ */
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius)}
@@ -315,11 +353,29 @@ section{padding-block:clamp(64px,9vw,136px)}
 .cols3 h3{margin:14px 0 10px}
 .cols3 p{color:var(--muted);font-size:var(--fs-small)}
 @media(max-width:899px){.cols3{grid-template-columns:1fr}}
+@media(max-width:767px){
+  .cols3{display:flex;gap:12px;background:none;border:0;overflow-x:auto;
+    scroll-snap-type:x mandatory;margin-inline:calc(var(--pad) * -1);
+    padding-inline:var(--pad);scrollbar-width:none}
+  .cols3::-webkit-scrollbar{display:none}
+  .cols3 > div{flex:0 0 84%;scroll-snap-align:start;border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px}
+}
 
 /* ============ 7. CALCULATOR ============ */
 .calc{background:var(--ink-2);border-block:1px solid var(--line)}
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-@media(max-width:899px){.calc-grid{grid-template-columns:1fr}}
+/* на телефоне две панели стопкой это 2 300px и непонятно, с какой начинать —
+   поэтому вкладки; на десктопе обе видны сразу и вкладки не нужны */
+.ctabs{display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.ctabs button{min-height:48px;padding:0 12px;border:1px solid var(--line);background:transparent;
+  color:var(--muted);border-radius:var(--radius);font-weight:700;font-size:14px;cursor:pointer;transition:.15s}
+.ctabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:899px){
+  .calc-grid{grid-template-columns:1fr}
+  .ctabs{display:grid}
+  .calc-grid > .panel.is-off{display:none}
+}
 .panel{background:var(--ink-3);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(22px,2.6vw,34px)}
 .panel h3{margin-bottom:6px}
 .panel > .lead{font-size:var(--fs-small);margin-bottom:24px}
@@ -365,6 +421,14 @@ section{padding-block:clamp(64px,9vw,136px)}
 /* ============ 8. REVIEWS ============ */
 .rev{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media(max-width:1023px){.rev{grid-template-columns:1fr}}
+/* три отзыва в столбик = лишние ~550px скролла; на телефоне это лента со снапом */
+@media(max-width:767px){
+  .rev{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);
+    scrollbar-width:none;-ms-overflow-style:none}
+  .rev::-webkit-scrollbar{display:none}
+  .rev article{flex:0 0 87%;scroll-snap-align:start;padding:22px}
+}
 .rev article{background:var(--ink-3);border:1px solid var(--line);border-radius:var(--radius);padding:28px;
   display:flex;flex-direction:column;gap:16px}
 .rev .stars{color:var(--accent-lit);letter-spacing:.14em;font-size:14px}
@@ -548,6 +612,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     <div class="filters" id="rimFilters" role="group" aria-label="ترشيح الجنوط حسب القطر"></div>
 
     <div class="bento" id="rimGrid"></div>
+    <div class="more-wrap"><button class="btn btn-ghost" id="rimMore" type="button" hidden></button></div>
   </div>
 </section>
 
@@ -608,6 +673,7 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     </div>
 
     <div class="tgrid" id="tyreGrid"></div>
+    <div class="more-wrap"><button class="btn btn-ghost" id="tyreMore" type="button" hidden></button></div>
   </div>
 </section>
 
@@ -635,6 +701,11 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
         <h2 data-rv>اقرأ مقاسك، ثم جهّز طلبك</h2>
       </div>
       <p class="lead" data-rv style="max-width:40ch">الجهة الأولى حساب رياضي بحت ويعمل الآن. والثانية تحوّل اختيارك إلى رسالة نردّ عليها بالسعر مباشرة.</p>
+    </div>
+
+    <div class="ctabs" id="calcTabs" role="group" aria-label="أقسام الحاسبة">
+      <button type="button" data-t="0" aria-pressed="true">اقرأ مقاسي</button>
+      <button type="button" data-t="1" aria-pressed="false">جهّز الطلب</button>
     </div>
 
     <div class="calc-grid">
@@ -810,16 +881,19 @@ var DATA = null;
 /* Словарь терминов каталога. В английской версии пустой — L() возвращает как есть.
    В /ar/ его подставляет build_ar.py: стиль диска, тип шины и названия услуг приходят
    из catalog.json по-английски, и переводить их надо на отрисовке, а не заменой строк. */
-var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
+var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Show fewer": "عرض أقل", "Show all {n} rims": "عرض كل الجنوط ({n})", "Show all {n} sizes": "عرض كل المقاسات ({n})", "— model to confirm": "— الموديل قيد التأكيد", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
 function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] : s; }
 /* Шаблон, а не склейка слов: в арабском существительное идёт перед определением,
    «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
-function tpl(pattern, r){
+function tpl(pattern, r, only){
+  /* only — выбранная в подборе машина: у покупателя она одна,
+     перечислять в заявке все совместимые незачем */
+  var cars = (only && r.fits.indexOf(only) > -1) ? [only] : r.fits;
   return L(pattern)
     .replace("{d}",    r.d)
     .replace("{pcd}",  r.pcd)
     .replace("{cb}",   r.cb)
-    .replace("{fits}", r.fits.map(vehicleName).join(", "));
+    .replace("{fits}", cars.map(vehicleName).join(", "));
 }
 
 /* ---------- 0. мелочь ---------- */
@@ -915,6 +989,29 @@ function gateSync(){
 /* ---------- 4. каталог ---------- */
 var rimFilter="all", tyreFilter="all", pickVehicle="";
 var rimGrid=document.getElementById("rimGrid"), tyreGrid=document.getElementById("tyreGrid");
+var rimMore=document.getElementById("rimMore"), tyreMore=document.getElementById("tyreMore");
+
+/* ---------- «показать все»: только мобильная раскладка прячет хвост ----------
+   CSS режет с 7-й карточки, JS лишь переключает класс и подпись. Ширину не меряем —
+   иначе поворот телефона оставит кнопку в неверном состоянии. */
+var MOBILE_SHOWN = 6;
+var CROP = ["50% 42%", "41% 50%", "59% 46%", "50% 60%", "46% 36%", "54% 54%", "50% 50%"];
+function syncMore(grid, btn, n, label){
+  if(n <= MOBILE_SHOWN){ btn.hidden = true; grid.classList.remove("is-open"); return; }
+  btn.hidden = false;
+  btn.textContent = grid.classList.contains("is-open")
+    ? L("Show fewer")
+    : L(label).replace("{n}", n);
+}
+function wireMore(grid, btn, label){
+  btn.addEventListener("click", function(){
+    var open = grid.classList.toggle("is-open");
+    syncMore(grid, btn, grid.children.length, label);
+    if(!open) grid.scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+  });
+}
+wireMore(rimGrid, rimMore, "Show all {n} rims");
+wireMore(tyreGrid, tyreMore, "Show all {n} sizes");
 
 /* idx — индекс в списке «что вам нужно», а не значение: в /ar/ значения переведены,
    индекс языконезависим. 0 = шины, 1 = диски. */
@@ -922,13 +1019,18 @@ function askFor(text, idx){
   document.getElementById("qSize").value = text;
   var sel = document.getElementById("qItem");
   if(idx !== null && sel.options[idx]) sel.selectedIndex = idx;
+  setCalcTab(1);   /* иначе на телефоне прилетаешь на вкладку декодера */
   quote();
   document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
 }
 
+/* В выпадающем списке модель-заглушка видна («GMC — model to confirm»),
+   а в тексте заявки она только мешает магазину — там остаётся одна марка. */
 function vehicleName(id){
   var v = DATA.vehicles.filter(function(x){ return x.id === id; })[0];
-  return v ? v.make + " " + v.model : id;
+  if(!v) return id;
+  var m = L(v.model);
+  return m.charAt(0) === "\u2014" ? v.make : v.make + " " + m;
 }
 
 function renderRims(){
@@ -942,23 +1044,33 @@ function renderRims(){
     if(!pickVehicle && rimFilter === "all" && g.r && r.d !== g.r) return false;
     return true;
   });
-  items.forEach(function(r){
+  items.forEach(function(r, i){
     var fits = r.fits.map(function(id){ return "<b>"+vehicleName(id)+"</b>"; }).join(" · ");
     var soon = '<span class="soon">'+L("to confirm")+'</span>';
+    /* фотографий шесть, а карточек двадцать одна: без разного кропа стена
+       читается как копипаста. Сдвигаем точку кадрирования по индексу. */
+    var pos = CROP[i % CROP.length];
     html += '<article class="card '+r.size+'">'
-      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" alt="'+tpl("{d}&Prime; rim, {pcd}, fits {fits}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
+      + '<div class="card-ph"><img src="'+"../"+r.img+'?v=1" style="object-position:'+pos+'" alt="'+tpl("{d}&Prime; rim, {pcd}, fits {fits}", r)+'" width="'+r.w+'" height="'+r.h+'" loading="lazy"></div>'
       + '<div class="card-b"><h3>'+r.d+'&Prime; &middot; '+r.pcd.replace("x","&times;")+'</h3>'
       + '<div class="card-spec"><span><i>'+L("cb")+'</i> '+r.cb+' '+L("mm")+'</span>'
-      + '<span><i>'+L("width")+'</i> '+(r.width || soon)+'</span>'
-      + '<span><i>'+L("et")+'</i> '+(r.et || soon)+'</span></div>'
+      /* пока клиент не прислал ни ширину, ни вылет — одна строка вместо двух
+         одинаковых «уточняется» в каждой из двадцати одной карточки */
+      + (r.width || r.et
+          ? '<span><i>'+L("width")+'</i> '+(r.width || soon)+'</span>'
+            + '<span><i>'+L("et")+'</i> '+(r.et || soon)+'</span>'
+          : '<span class="soon">'+L("width & offset to confirm")+'</span>')
+      + '</div>'
       + '<div class="card-fits">'+L("Fits")+' '+fits+'</div>'
       + '<div class="card-foot"><span class="price">'+(r.price ? L("AED")+" "+r.price : L("Price on request"))+'</span>'
-      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; rim, {pcd}, CB {cb} — {fits}", r)+'">'+L("Ask us")+'</button></div></div></article>';
+      + '<button class="card-ask" data-item="1" data-ask="'+tpl("{d}&Prime; rim, {pcd}, CB {cb} — {fits}", r, pickVehicle)+'">'+L("Ask us")+'</button></div></div></article>';
   });
   if(!items.length){
     html = '<p class="empty">'+L("Nothing listed for that combination yet. Call ")+PHONE_H+L(" — the list on this page is only what we have confirmed so far.")+'</p>';
   }
   rimGrid.innerHTML = html;
+  rimGrid.classList.remove("is-open");
+  syncMore(rimGrid, rimMore, items.length, "Show all {n} rims");
   sweep(true);
 }
 
@@ -985,7 +1097,7 @@ function fillModels(){
   var make = pMake.value;
   var list = DATA.vehicles.filter(function(v){ return v.make === make; });
   pModel.innerHTML = '<option value="">'+L("Any model")+'</option>'
-    + list.map(function(v){ return '<option value="'+v.id+'">'+v.model+'</option>'; }).join("");
+    + list.map(function(v){ return '<option value="'+v.id+'">'+L(v.model)+'</option>'; }).join("");
   pModel.disabled = !make;
 }
 
@@ -1034,6 +1146,8 @@ function renderTyres(){
       + '<button data-item="0" data-ask="'+size+' '+t.load+t.speed+'">'+L("Ask us")+'</button></span></article>';
   });
   tyreGrid.innerHTML = html || '<p class="empty">لا توجد مقاسات ضمن هذا الترشيح بعد.</p>';
+  tyreGrid.classList.remove("is-open");
+  syncMore(tyreGrid, tyreMore, items.length, "Show all {n} sizes");
 }
 
 document.addEventListener("click", function(e){
@@ -1078,6 +1192,20 @@ function decode(){
   document.getElementById("qSize").value = fmt(o);
   quote();
 }
+/* ---------- 4b. вкладки калькулятора (только мобильная раскладка) ---------- */
+var calcTabs = document.getElementById("calcTabs");
+function setCalcTab(i){
+  var panels = document.querySelectorAll(".calc-grid > .panel");
+  for(var k=0;k<panels.length;k++) panels[k].classList.toggle("is-off", k !== i);
+  var btns = calcTabs.querySelectorAll("button");
+  for(var j=0;j<btns.length;j++) btns[j].setAttribute("aria-pressed", j === i ? "true" : "false");
+}
+calcTabs.addEventListener("click", function(e){
+  var b = e.target.closest("button[data-t]");
+  if(b) setCalcTab(+b.getAttribute("data-t"));
+});
+setCalcTab(0);
+
 /* ---------- 5a. маска размера: цифры набираются подряд, разделители встают сами ----------
    2254518 → 225/45 R18 ·  225451894W → 225/45 R18 94W
    Маску вешаем ДО остальных input-обработчиков, чтобы decode()/quote() читали уже готовое. */

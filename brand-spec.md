@@ -111,49 +111,66 @@
 
 ---
 
-## 5a. Применимости дисков (WhatsApp 26.10.2026, правка клиента 28.10.2026)
+## 5a. Применимости дисков — боевые данные клиента
 
-Формат строки клиента: `диаметр · PCD · CB`. **Это боевые данные, они на сайте.**
+Полный список 15.10.2026 + дополнение 26.10 + правка 28.10. **14 машин, 21 позиция, всё на сайте.**
 
 | Авто | Диаметры | PCD | CB |
 |---|---|---|---|
+| Dodge Ram | 17, 18 | 5×139.7 | 77 |
+| Ford F-150 | 17, 18, 20 | 6×135 | 87 |
+| GMC ⚠️ модель не названа | 17, 18, 20 | 6×139.7 | 78 |
 | Jeep Wrangler | 17 | 5×127 | 71 |
 | Jetour T2 | 17, 20 | 5×108 | 60 |
-| Toyota Land Cruiser 100 | 16 | 5×150 | 110 ✳ |
+| Lexus LX 570 ⚠️ прислано как «Ls570» | 17, 18, 20 | 5×150 | 110 |
+| Nissan Patrol Y61 | 16, 17 | 6×139.7 | 110 |
+| Nissan Patrol Y62 ✳ | 17, 18, 20 | 6×139.7 | **78** |
+| Nissan Patrol Y63 ✳ | 17, 18, 20 | 6×139.7 | **78** |
+| Nissan Xterra | 16 | 6×114.3 | 66 |
+| Suzuki Jimny | 15, 16 | 5×139.7 | 108 |
+| Toyota Land Cruiser 100 ✳ | 16 | 5×150 | 110 |
 | Toyota Land Cruiser 200 | 17, 18 | 5×150 | 110 |
 | Toyota Land Cruiser 300 | 17 | 6×139.7 | 95 |
-| Nissan Patrol Y61 | 16, 17 | 6×139.7 | 110 |
-| Nissan Patrol Y62 | 17, 18, 20 | 6×139.7 | **78** ✳ |
-| Nissan Patrol Y63 | 17 | 6×139.7 | **78** ✳ |
 
-✳ — исправлено/добавлено клиентом 28.10.2026.
+✳ — клиент поправил сам 28.10.
 
-Лежит в `catalog.json` → `vehicles` + `rims`, **8 машин, 12 позиций**. На сайте подбор
-«по автомобилю»: марка → модель → только подходящие диски + плашка PCD / CB / диаметры.
+Проверка целостности проходит: битых ссылок нет, машин без дисков нет,
+**у каждой машины ровно одно центральное отверстие на все диаметры** — физически верно,
+ЦО это свойство ступицы, а не диаметра.
 
 ### ✅ Расхождение закрыто — проверка себя оправдала
 
-26.10 клиент прислал по Y62 `CB110`. Я не стал класть на сайт и сверил: у Y62 штатное
-центральное отверстие **78,1 мм**, 110,1 — это предыдущий Y61. Источники:
+26.10 клиент прислал по Y62 `CB110`. Я не стал публиковать и сверил: у Y62 штатное ЦО
+**78,1 мм**, 110,1 — это предыдущий Y61. Источники:
 [dynamicwheelco.com.au](https://dynamicwheelco.com.au/vehicle/nissan/patrol-y62/),
 [avtoreference.com](https://avtoreference.com/en/auto/nissan/patrol/2019/).
 
-28.10 клиент подтвердил правку своей рукой: `Nissan Y62 17 6x139 Cb110` → **`Cb78`**,
-дословно «Yes sorry bro». Заодно прислал **новую машину Y63** (тоже CB78) и подтвердил,
-что у LC100 именно `CB110` — в первом сообщении было «cb1100», это опечатка.
+28.10 клиент поправил себя своей рукой: `Y62 17 6x139 Cb110` → **`Cb78`**, дословно
+«Yes sorry bro». Заодно дал Y63 (тоже CB78) и подтвердил, что у LC100 именно `CB110` —
+«cb1100» было опечаткой.
 
-**Вывод на будущее: присланные клиентом числа сверять до публикации, а не после.**
-Ошибка сидела бы на боевом сайте, человек купил бы диск и не надел его на ступицу.
+**Правило: числа клиента сверять ДО публикации, а не после.**
+
+### ⚠️ Две вещи ждут подтверждения
+
+**1. «Ls570» — такой машины не существует.** Lexus LS это 5×120 / CB60.1, а присланные
+5×150 / CB110 — это ровно **LX 570**. Проверено:
+[wheel-sizes.com](https://wheel-sizes.com/hubbore/lexus/lx-570/),
+[studpattern.com](https://studpattern.com/lexus-lx570-2008/).
+На сайте стоит **LX 570**, как и `cb1100` → `CB110` раньше. Нужно подтверждение.
+
+**2. «Gmc» прислан без модели.** 6×139.7 / CB78 — это платформа GM 1500 (Sierra, Yukon),
+но Canyon там уже 6×120, поэтому «все GMC» написать нельзя. В подборе модель стоит как
+**«— модель уточняется»**, в тексте заявки остаётся просто «GMC».
 
 ### ⚠️ Не разобрано
-- В переписке два **голосовых по 0:15** — я их не слышал, присланы только скриншотом.
-  Если там есть цифры (ширина, вылет, цены) — нужен текст или пересылка аудио.
-- Клиент сам пишет «Let me know brother if anything missing» — он готов дослать, надо просить.
+- Два **голосовых по 0:15** — присланы скриншотом, я их не слышал. Если там цифры — нужен текст.
+- Клиент сам пишет «Let me know brother if anything missing» — готов досылать.
 
 ### Чего в применимостях НЕТ
-- **Ширина (J) и вылет (ET)** — без них подбор неполный. На карточках стоит «уточняется».
-- Размеры шин под эти же машины.
-- Цены и наличие по каждой позиции.
+- **Ширина (J) и вылет (ET)** — на карточках стоит «уточняется». Последняя дыра.
+- Размеры шин под эти машины.
+- Цены и наличие.
 - Свои фото — на карточках иллюстративные, и это написано прямо в секции.
 
 ---
@@ -183,16 +200,17 @@
 > Hi! I'm rebuilding the Wheel Zone website from scratch — the current one still has the template's demo contacts and demo reviews on it, so it can't be used as it is. To fill it with your real business I need the following:
 >
 > **Your fitment list — it is live**
-> Thank you for the correction on the Y62 and for the Y63. All eight cars are on the site now: pick the make, pick the model, and only the wheels that bolt on are shown. Wrangler, Jetour T2, LC100, LC200, LC300, Patrol Y61, Y62 and Y63.
+> Thank you for the correction on the Y62 and for the Y63. All fourteen cars are on the site now: pick the make, pick the model, and only the wheels that bolt on are shown. Ram, F-150, GMC, Wrangler, Jetour T2, LX 570, Patrol Y61/Y62/Y63, Xterra, Jimny, LC100, LC200 and LC300.
 >
-> 1. For each of those I still need the **rim width (J) and the offset (ET)**. Those are the last two numbers missing from every card — without them a customer cannot be sure the wheel will clear the brake and sit flush, and right now the site honestly says "to confirm".
-> 2. You sent two voice notes that did not reach me, only the screenshots did. If there were any numbers in them, could you type them out?
-> 3. Which other cars can you cover? Eight is a strong start, and every model you add is another customer landing on exactly the right page.
+> 1. Two of the lines need a quick confirmation. You wrote **"Ls570"** — Lexus never made an LS570, and 5x150 with a 110 mm bore is exactly the **LX 570**, so that is what the site says. Correct? And **"Gmc"** came without a model: 6x139.7 / CB78 is the Sierra and Yukon platform, but the Canyon is 6x120, so which GMC models do you mean?
+> 2. For every car I still need the **rim width (J) and the offset (ET)**. Those are the last two numbers missing from every card — without them a customer cannot be sure the wheel will clear the brake and sit flush, and right now the site honestly says "to confirm".
+> 3. You sent two voice notes that did not reach me, only the screenshots did. If there were any numbers in them, could you type them out?
+> 4. Which other cars can you cover? Fourteen is a strong start, and every model you add is another customer landing on exactly the right page.
 >
 > **Stock & pricing**
-> 4. Price list, or at least a price range per fitment — for example "17" 6x139.7 from AED X". Without numbers the site can only say "price on request".
-> 5. Which tyre brands do you actually keep in stock, and what tyre sizes go with each of the cars above (for example 275/60R20 for the Y62)?
-> 6. What do you charge for fitting, balancing, alignment, puncture repair, nitrogen and rim repair?
+> 5. Price list, or at least a price range per fitment — for example "17" 6x139.7 from AED X". Without numbers the site can only say "price on request".
+> 6. Which tyre brands do you actually keep in stock, and what tyre sizes go with each of the cars above (for example 275/60R20 for the Y62)?
+> 7. What do you charge for fitting, balancing, alignment, puncture repair, nitrogen and rim repair?
 >
 > **Services**
 > 5. Your customers specifically mention rim repair in the reviews. What exactly do you repair — buckled rims, cracks, curb rash, refinishing/powder coating? How long does it take?
