@@ -147,16 +147,27 @@ section{padding-block:clamp(52px,9vw,136px)}
 .gate{display:flex;align-items:flex-end;gap:clamp(6px,1.6vw,22px);flex-wrap:nowrap}
 .gate-f{display:flex;flex-direction:column;gap:8px;min-width:0}
 .gate-f .label{font-size:11px}
-.gate input{
+.gate select{
   font-family:"JetBrains Mono",monospace;font-size:var(--fs-mega);font-weight:700;line-height:.9;
   background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--text);
-  width:3.3ch;padding:0 0 10px;text-align:center;caret-color:var(--accent-lit);
-  transition:border-color .2s;-moz-appearance:textfield}
-.gate input#gP,.gate input#gR{width:2.3ch}
-.gate input::-webkit-outer-spin-button,.gate input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.gate input::placeholder{color:#75808F;opacity:1}
-.gate input:focus{border-bottom-color:var(--accent);outline:none}
-.gate input.filled{border-bottom-color:var(--accent-lit)}
+  width:3.5ch;padding:0 0 10px;text-align:center;text-align-last:center;cursor:pointer;
+  -webkit-appearance:none;appearance:none;border-radius:0;transition:border-color .2s}
+.gate select#gP,.gate select#gR{width:2.5ch}
+/* пока не выбрано — цифра служит подсказкой, поэтому приглушена */
+.gate select:not(.filled){color:#75808F}
+.gate select:focus{border-bottom-color:var(--accent);outline:none}
+.gate select.filled{border-bottom-color:var(--accent-lit)}
+.gate select:disabled{cursor:not-allowed;opacity:.45}
+/* список открывается системный, поэтому пункты красим отдельно: на светлой
+   теме Windows они иначе белым по белому */
+.gate select option{background:var(--ink-2);color:var(--text);font-size:16px}
+/* шеврон: без него большая цифра не читается как список */
+.gate-f{position:relative}
+.gate-f::after{content:"";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);
+  width:9px;height:9px;border-right:2px solid var(--dim);border-bottom:2px solid var(--dim);
+  rotate:45deg;pointer-events:none;transition:border-color .2s}
+.gate-f:has(select.filled)::after{border-color:var(--accent-lit)}
+.gate-f:has(select:disabled)::after{opacity:.4}
 .gate .sep{font-family:"JetBrains Mono",monospace;font-size:clamp(28px,4.4vw,64px);color:var(--dim);
   font-weight:700;line-height:1;padding-bottom:calc(10px + .1em);flex:none}
 .gate-out{margin-top:28px;min-height:30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -607,7 +618,7 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
       <span class="label mono" style="color:var(--accent-lit)">4.4 ★ · 40 reviews on Google</span>
     </div>
     <h1>Tell us your size. The rest is our job.</h1>
-    <p class="lead">Rims, tyres and rim repair on 36th Street. Type the numbers off your tyre wall and the catalogue below filters itself.</p>
+    <p class="lead">Rims, tyres and rim repair on 36th Street. Pick the three numbers off your tyre wall and the catalogue below filters itself.</p>
 
     <div class="find" id="find">
     <div class="find-tabs" id="findTabs" role="tablist" aria-label="How to search">
@@ -618,20 +629,20 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
 
     <div class="find-panels">
     <div class="find-panel on" id="fpan0" role="tabpanel" aria-labelledby="ftab0">
-    <div class="gate" role="group" aria-label="Enter your tyre size">
+    <div class="gate" role="group" aria-label="Pick your tyre size">
       <div class="gate-f">
         <label class="label" for="gW">Width</label>
-        <input id="gW" class="mono" type="text" inputmode="numeric" maxlength="3" placeholder="225" autocomplete="off" aria-describedby="gateOut">
+        <select id="gW" class="mono" aria-describedby="gateOut"><option value="">225</option><option value="135">135</option><option value="145">145</option><option value="155">155</option><option value="165">165</option><option value="175">175</option><option value="185">185</option><option value="195">195</option><option value="205">205</option><option value="215">215</option><option value="225">225</option><option value="235">235</option><option value="245">245</option><option value="255">255</option><option value="265">265</option><option value="275">275</option><option value="285">285</option><option value="295">295</option><option value="305">305</option><option value="315">315</option><option value="325">325</option><option value="335">335</option><option value="345">345</option><option value="355">355</option></select>
       </div>
       <span class="sep">/</span>
       <div class="gate-f">
         <label class="label" for="gP">Profile</label>
-        <input id="gP" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="45" autocomplete="off">
+        <select id="gP" class="mono" disabled><option value="">45</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option><option value="60">60</option><option value="65">65</option><option value="70">70</option><option value="75">75</option><option value="80">80</option><option value="85">85</option></select>
       </div>
       <span class="sep">R</span>
       <div class="gate-f">
         <label class="label" for="gR">Rim</label>
-        <input id="gR" class="mono" type="text" inputmode="numeric" maxlength="2" placeholder="18" autocomplete="off">
+        <select id="gR" class="mono" disabled><option value="">18</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
       </div>
     </div>
     <div class="gate-out" id="gateOut" aria-live="polite">
@@ -1091,9 +1102,18 @@ function fmt(c){ return c.w+"/"+c.p+" R"+c.r; }
 /* ---------- 3. hero: ворота размера ---------- */
 var gW=document.getElementById("gW"), gP=document.getElementById("gP"), gR=document.getElementById("gR");
 var gateOut=document.getElementById("gateOut");
-function digits(el){ el.value = el.value.replace(/\D/g,""); }
 function gateRead(){ return { w:+gW.value||0, p:+gP.value||0, r:+gR.value||0 }; }
+/* Размер выбирается по очереди: профиль открывается после ширины, диаметр — после
+   профиля. Снял ширину — сбрасываем всё, что ниже, иначе на экране остался бы
+   диаметр от размера, которого больше нет. */
+function gateCascade(){
+  if(!gW.value) gP.value = "";
+  if(!gP.value) gR.value = "";
+  gP.disabled = !gW.value;
+  gR.disabled = !gP.value;
+}
 function gateSync(){
+  gateCascade();
   [gW,gP,gR].forEach(function(el){ el.classList.toggle("filled", el.value.length>0); });
   var g = gateRead(), bits = [];
   if(g.w && (g.w<135 || g.w>355)) bits.push('<span class="hint">Width is usually between 135 and 355.</span>');
@@ -1117,11 +1137,15 @@ function gateSync(){
   renderRims(); renderTyres();
 }
 [gW,gP,gR].forEach(function(el,i,arr){
-  el.addEventListener("input", function(){
-    digits(el); gateSync();
-    if(el.value.length === el.maxLength && arr[i+1]) arr[i+1].focus();
+  el.addEventListener("change", function(){
+    gateSync();
+    /* открыть следующий список за человека нельзя — переводим на него фокус,
+       чтобы с клавиатуры шаг продолжался без мыши */
+    var next = arr[i+1];
+    if(el.value && next && !next.disabled && !next.value) next.focus();
   });
 });
+gateCascade();
 
 /* ---------- 4. каталог ---------- */
 var rimFilter="all", tyreFilter="all", pickVehicle="";
