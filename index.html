@@ -166,7 +166,7 @@ section{padding-block:clamp(52px,9vw,136px)}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
 .hero-wheel{position:absolute;right:-8vw;bottom:-14vh;z-index:1;width:min(46vw,620px);opacity:.5;
   pointer-events:none;mix-blend-mode:screen}
-.hero-wheel img{width:100%;border-radius:50%;filter:grayscale(1) contrast(1.15)}
+.hero-wheel img{width:100%;border-radius:50%;filter:grayscale(1) contrast(1.15) brightness(.62)}
 @media(max-width:1023px){.hero-wheel{display:none}.hero-photo::after{background:linear-gradient(180deg,rgba(11,14,18,.86),rgba(11,14,18,.95))}}
 @media(max-width:479px){.gate input{width:3.4ch}.gate{gap:4px}}
 
@@ -552,7 +552,7 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
     <img src="img/hero-side.webp?v=1" alt="Alloy wheel on a car at Wheel Zone Tyre Trading" width="1600" height="898" fetchpriority="high">
   </div>
   <div class="hero-light" id="heroLight"></div>
-  <div class="hero-wheel" id="heroWheel"><img src="img/rim-chrome.webp?v=1" alt="" width="1600" height="2124" loading="lazy" aria-hidden="true"></div>
+  <div class="hero-wheel" id="heroWheel"><img src="img/rim-hero.webp?v=1" alt="" width="534" height="533" loading="lazy" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-kicker">
       <span class="label" style="display:inline-flex;align-items:center;gap:10px"><span class="dot"></span>Ras Al Khor Industrial Area 2 · Dubai</span>
@@ -1433,7 +1433,7 @@ if(!RM && !matchMedia("(hover: none)").matches){
 }
 
 /* ---------- 8. старт ---------- */
-fetch("catalog.json?v=1")
+fetch("catalog.json?v=2")
   .then(function(r){ return r.json(); })
   .then(function(j){ DATA = j; buildPicker(); fillModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
   .catch(function(){

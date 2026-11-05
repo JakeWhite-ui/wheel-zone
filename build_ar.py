@@ -63,7 +63,7 @@ _terms_js = "var TERMS = " + _json.dumps(TERMS, ensure_ascii=False) + ";"
 assert "var TERMS = window.WZ_TERMS || {};" in html, "крючок L() пропал из index.html"
 html = html.replace("var TERMS = window.WZ_TERMS || {};", _terms_js)
 html = html.replace('content="https://tirez.ae/img/', 'content="https://tirez.ae/img/')
-html = html.replace('fetch("catalog.json?v=1")', 'fetch("../catalog.json?v=1")')
+html = html.replace('fetch("catalog.json?v=2")', 'fetch("../catalog.json?v=2")')
 # якорь без того, что идёт ПОСЛЕ ?v=1: любой новый атрибут у <img> ломал замену
 html = html.replace("""+r.img+'?v=1\"""", """+"../"+r.img+'?v=1\"""")
 assert '"../"+r.img' in html, "путь к картинкам каталога не переписан"
@@ -360,9 +360,9 @@ json.loads(mf)
 io.open(os.path.join("ar", "manifest.webmanifest"), "w", encoding="utf-8").write(mf)
 
 sw = io.open("sw.js", encoding="utf-8").read()
-assert 'var V = "wz-en-v2";' in sw, "имя кэша в sw.js изменилось"
-sw = sw.replace('var V = "wz-en-v2";', 'var V = "wz-ar-v2";')
-sw = sw.replace('"./catalog.json?v=1"', '"../catalog.json?v=1"')
+assert 'var V = "wz-en-v3";' in sw, "имя кэша в sw.js изменилось"
+sw = sw.replace('var V = "wz-en-v3";', 'var V = "wz-ar-v3";')
+sw = sw.replace('"./catalog.json?v=2"', '"../catalog.json?v=2"')
 io.open(os.path.join("ar", "sw.js"), "w", encoding="utf-8").write(sw)
 print("written: ar/manifest.webmanifest, ar/sw.js")
 
