@@ -144,32 +144,6 @@ section{padding-block:clamp(52px,9vw,136px)}
   flex:none;align-self:flex-start;margin-top:.48em}
 .hero h1{font-size:var(--fs-h1);max-width:16ch;margin-bottom:16px}
 .hero .lead{margin-bottom:40px}
-.gate{display:flex;align-items:flex-end;gap:clamp(6px,1.6vw,22px);flex-wrap:nowrap}
-.gate-f{display:flex;flex-direction:column;gap:8px;min-width:0}
-.gate-f .label{font-size:11px}
-.gate select{
-  font-family:"JetBrains Mono",monospace;font-size:var(--fs-mega);font-weight:700;line-height:.9;
-  background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--text);
-  width:3.5ch;padding:0 0 10px;text-align:center;text-align-last:center;cursor:pointer;
-  -webkit-appearance:none;appearance:none;border-radius:0;transition:border-color .2s}
-.gate select#gP,.gate select#gR{width:2.5ch}
-/* пока не выбрано — цифра служит подсказкой, поэтому приглушена */
-.gate select:not(.filled){color:#75808F}
-.gate select:focus{border-bottom-color:var(--accent);outline:none}
-.gate select.filled{border-bottom-color:var(--accent-lit)}
-.gate select:disabled{cursor:not-allowed;opacity:.45}
-/* список открывается системный, поэтому пункты красим отдельно: на светлой
-   теме Windows они иначе белым по белому */
-.gate select option{background:var(--ink-2);color:var(--text);font-size:16px}
-/* шеврон: без него большая цифра не читается как список */
-.gate-f{position:relative}
-.gate-f::after{content:"";position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);
-  width:9px;height:9px;border-right:2px solid var(--dim);border-bottom:2px solid var(--dim);
-  rotate:45deg;pointer-events:none;transition:border-color .2s}
-.gate-f:has(select.filled)::after{border-color:var(--accent-lit)}
-.gate-f:has(select:disabled)::after{opacity:.4}
-.gate .sep{font-family:"JetBrains Mono",monospace;font-size:clamp(28px,4.4vw,64px);color:var(--dim);
-  font-weight:700;line-height:1;padding-bottom:calc(10px + .1em);flex:none}
 .gate-out{margin-top:28px;min-height:30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .gate-out .pill{font-family:"JetBrains Mono",monospace;font-size:var(--fs-small);color:var(--accent-lit);
   border:1px solid var(--accent-dim);border-radius:var(--radius);padding:6px 12px;background:rgba(5,124,188,.07)}
@@ -179,7 +153,6 @@ section{padding-block:clamp(52px,9vw,136px)}
   pointer-events:none;mix-blend-mode:screen}
 .hero-wheel img{width:100%;border-radius:50%;filter:grayscale(1) contrast(1.15) brightness(.62)}
 @media(max-width:1023px){.hero-wheel{display:none}.hero-photo::after{background:linear-gradient(180deg,rgba(11,14,18,.86),rgba(11,14,18,.95))}}
-@media(max-width:479px){.gate input{width:3.4ch}.gate{gap:4px}}
 
 /* ============ ПОИСК В ШАПКЕ: три входа ============
    By size и By vehicle ищут по нашим данным. By brand данных не имеет —
@@ -197,14 +170,14 @@ section{padding-block:clamp(52px,9vw,136px)}
   border-radius:0 var(--radius) var(--radius) var(--radius);padding:clamp(18px,2.4vw,28px)}
 /* ворота размера рисовались свободно на фото; в панели 900px кегль 200px
    не помещается — «18» вылезало за правый край вместе с подчёркиванием */
+/* ряд полей растёт по содержимому, кнопка прижата вправо — как в референсе */
+.find-row .field .label{margin-bottom:0}
 .find-panels{display:grid;align-items:start}
 .find-panels > .find-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .16s}
 .find-panels > .find-panel.on{visibility:visible;opacity:1}
 @media(prefers-reduced-motion:reduce){.find-panels > .find-panel{transition:none}}
-#fpan0{--fs-mega:clamp(50px,8.4vw,124px)}
-#fpan0 .gate .sep{font-size:clamp(24px,3.4vw,52px)}
-#fpan0 .gate-out{margin-top:22px}
-#fpan0 .hero-cta{margin-top:26px}
+#fpan0 .gate-out{margin-top:20px}
+#fpan0 .hero-cta{margin-top:20px}
 .find-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
 .find-row.two{grid-template-columns:1fr 1fr auto}
 .find-row .field{margin-bottom:0;display:flex;flex-direction:column;gap:8px;min-width:0}
@@ -584,7 +557,7 @@ body,h1,h2,h3,.btn,.lead,p,li,dd,dt,label,select,option{font-family:"Cairo","Arc
 h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .label{font-family:"Cairo",sans-serif;letter-spacing:0;font-weight:700}
 .mono,.ticker b,.card-spec,.dec dd,.alts li,.summary,.trow .sz,.trow .mi,.info dd.mono,
-.qty output,.proof .n,.gate input,.cols3 .mono,.list li .mono,.empty,.price,.ph-slot{
+.qty output,.proof .n,.cols3 .mono,.list li .mono,.empty,.price,.ph-slot{
   font-family:"JetBrains Mono",ui-monospace,monospace;direction:ltr}
 .card-spec,.dec,.alts li,.info > div{text-align:start}
 .quote{border-left:0;border-right:2px solid var(--accent);padding:4px 20px 4px 0}
@@ -595,12 +568,11 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .hero-photo::after{background:linear-gradient(270deg,var(--ink) 0%,rgba(11,14,18,.95) 42%,rgba(11,14,18,.72) 100%),
   linear-gradient(0deg,var(--ink) 0%,rgba(11,14,18,.35) 34%,transparent 62%)}
 .hero-wheel{right:auto;left:-8vw}
-/* .gate внутри direction:ltr — там flex-end это право.
-   .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
+/* .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
    уезжали на светлую половину фото и переставали читаться. Нужен flex-start. */
-.gate{direction:ltr;justify-content:flex-end}
 .gate-out,.hero-cta{justify-content:flex-start}
-.gate-f .label{direction:rtl}
+/* сам размер пишется слева направо в любой локали */
+.gate-out .pill{direction:ltr}
 .skip:focus{left:auto;right:var(--pad)}
 .alts li em,.trow .mi{direction:rtl}
 .alts li span:first-child,.trow .sz{direction:ltr}
@@ -658,28 +630,26 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 
     <div class="find-panels">
     <div class="find-panel on" id="fpan0" role="tabpanel" aria-labelledby="ftab0">
-    <div class="gate" role="group" aria-label="اختر مقاس إطارك">
-      <div class="gate-f">
+    <div class="find-row" role="group" aria-label="اختر مقاس إطارك">
+      <div class="field">
         <label class="label" for="gW">العرض</label>
-        <select id="gW" class="mono" aria-describedby="gateOut"><option value="">225</option><option value="135">135</option><option value="145">145</option><option value="155">155</option><option value="165">165</option><option value="175">175</option><option value="185">185</option><option value="195">195</option><option value="205">205</option><option value="215">215</option><option value="225">225</option><option value="235">235</option><option value="245">245</option><option value="255">255</option><option value="265">265</option><option value="275">275</option><option value="285">285</option><option value="295">295</option><option value="305">305</option><option value="315">315</option><option value="325">325</option><option value="335">335</option><option value="345">345</option><option value="355">355</option></select>
+        <select id="gW" aria-describedby="gateOut"><option value="">اختر العرض</option><option value="135">135</option><option value="145">145</option><option value="155">155</option><option value="165">165</option><option value="175">175</option><option value="185">185</option><option value="195">195</option><option value="205">205</option><option value="215">215</option><option value="225">225</option><option value="235">235</option><option value="245">245</option><option value="255">255</option><option value="265">265</option><option value="275">275</option><option value="285">285</option><option value="295">295</option><option value="305">305</option><option value="315">315</option><option value="325">325</option><option value="335">335</option><option value="345">345</option><option value="355">355</option></select>
       </div>
-      <span class="sep">/</span>
-      <div class="gate-f">
+      <div class="field">
         <label class="label" for="gP">النسبة</label>
-        <select id="gP" class="mono" disabled><option value="">45</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option><option value="60">60</option><option value="65">65</option><option value="70">70</option><option value="75">75</option><option value="80">80</option><option value="85">85</option></select>
+        <select id="gP" disabled><option value="">اختر النسبة</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option><option value="60">60</option><option value="65">65</option><option value="70">70</option><option value="75">75</option><option value="80">80</option><option value="85">85</option></select>
       </div>
-      <span class="sep">R</span>
-      <div class="gate-f">
+      <div class="field">
         <label class="label" for="gR">قطر الجنط</label>
-        <select id="gR" class="mono" disabled><option value="">18</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
+        <select id="gR" disabled><option value="">اختر القطر</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
       </div>
+      <a class="btn" href="#rims" id="gateGo">ابحث عن الإطارات</a>
     </div>
     <div class="gate-out" id="gateOut" aria-live="polite">
       <span class="hint">المقاس مطبوع على جانب الإطار — مثال 225/45 R18.</span>
     </div>
 
     <div class="hero-cta">
-      <a class="btn" href="#rims" id="gateGo">اعرض الجنوط المطابقة</a>
       <a class="btn btn-ghost" href="#calc">افتح حاسبة المقاسات</a>
     </div>
     </div><!-- /fpan0 -->

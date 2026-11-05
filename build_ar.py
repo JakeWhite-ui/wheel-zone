@@ -78,7 +78,7 @@ body,h1,h2,h3,.btn,.lead,p,li,dd,dt,label,select,option{font-family:"Cairo","Arc
 h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .label{font-family:"Cairo",sans-serif;letter-spacing:0;font-weight:700}
 .mono,.ticker b,.card-spec,.dec dd,.alts li,.summary,.trow .sz,.trow .mi,.info dd.mono,
-.qty output,.proof .n,.gate input,.cols3 .mono,.list li .mono,.empty,.price,.ph-slot{
+.qty output,.proof .n,.cols3 .mono,.list li .mono,.empty,.price,.ph-slot{
   font-family:"JetBrains Mono",ui-monospace,monospace;direction:ltr}
 .card-spec,.dec,.alts li,.info > div{text-align:start}
 .quote{border-left:0;border-right:2px solid var(--accent);padding:4px 20px 4px 0}
@@ -89,12 +89,11 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
 .hero-photo::after{background:linear-gradient(270deg,var(--ink) 0%,rgba(11,14,18,.95) 42%,rgba(11,14,18,.72) 100%),
   linear-gradient(0deg,var(--ink) 0%,rgba(11,14,18,.35) 34%,transparent 62%)}
 .hero-wheel{right:auto;left:-8vw}
-/* .gate внутри direction:ltr — там flex-end это право.
-   .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
+/* .gate-out и .hero-cta наследуют rtl, и у них flex-end это ЛЕВО: подпись и кнопки
    уезжали на светлую половину фото и переставали читаться. Нужен flex-start. */
-.gate{direction:ltr;justify-content:flex-end}
 .gate-out,.hero-cta{justify-content:flex-start}
-.gate-f .label{direction:rtl}
+/* сам размер пишется слева направо в любой локали */
+.gate-out .pill{direction:ltr}
 .skip:focus{left:auto;right:var(--pad)}
 .alts li em,.trow .mi{direction:rtl}
 .alts li span:first-child,.trow .sz{direction:ltr}
@@ -142,6 +141,8 @@ T = [
  ("Rims, tyres and rim repair on 36th Street. Pick the three numbers off your tyre wall and the catalogue below filters itself.",
   "جنوط وإطارات وإصلاح جنوط في شارع 36. اختر الأرقام الثلاثة المدوّنة على جدار إطارك، وسيُرشَّح الكتالوج أدناه من تلقاء نفسه."),
  ('aria-label="Pick your tyre size"', 'aria-label="اختر مقاس إطارك"'),
+ (">Select width<", ">اختر العرض<"), (">Select profile<", ">اختر النسبة<"), (">Select rim<", ">اختر القطر<"),
+ (">Find tyres<", ">ابحث عن الإطارات<"),
  (">Width<", ">العرض<"), (">Profile<", ">النسبة<"), (">Rim<", ">قطر الجنط<"),
  ("It is printed on the side of your tyre — for example 225/45 R18.",
   "المقاس مطبوع على جانب الإطار — مثال 225/45 R18."),
