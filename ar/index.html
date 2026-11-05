@@ -170,6 +170,54 @@ section{padding-block:clamp(52px,9vw,136px)}
 @media(max-width:1023px){.hero-wheel{display:none}.hero-photo::after{background:linear-gradient(180deg,rgba(11,14,18,.86),rgba(11,14,18,.95))}}
 @media(max-width:479px){.gate input{width:3.4ch}.gate{gap:4px}}
 
+/* ============ ПОИСК В ШАПКЕ: три входа ============
+   By size и By vehicle ищут по нашим данным. By brand данных не имеет —
+   марок шин клиент не присылал, поэтому вкладка собирает ЗАПРОС, а не фильтр. */
+.find{margin-top:clamp(22px,3vw,36px);max-width:900px}
+.find-tabs{display:flex;gap:4px}
+.find-tabs button{flex:0 0 auto;min-height:46px;padding:0 20px;cursor:pointer;
+  border:1px solid var(--line);border-bottom:0;border-radius:var(--radius) var(--radius) 0 0;
+  background:rgba(11,14,18,.72);color:var(--muted);font-weight:700;font-size:14px;
+  transition:background .15s,color .15s}
+.find-tabs button:hover{color:var(--text)}
+.find-tabs button[aria-selected="true"]{background:var(--ink-2);color:var(--text);
+  box-shadow:inset 0 2px 0 var(--accent)}
+.find-panel{background:var(--ink-2);border:1px solid var(--line);
+  border-radius:0 var(--radius) var(--radius) var(--radius);padding:clamp(18px,2.4vw,28px)}
+/* ворота размера рисовались свободно на фото; в панели 900px кегль 200px
+   не помещается — «18» вылезало за правый край вместе с подчёркиванием */
+.find-panels{display:grid;align-items:start}
+.find-panels > .find-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .16s}
+.find-panels > .find-panel.on{visibility:visible;opacity:1}
+@media(prefers-reduced-motion:reduce){.find-panels > .find-panel{transition:none}}
+#fpan0{--fs-mega:clamp(50px,8.4vw,124px)}
+#fpan0 .gate .sep{font-size:clamp(24px,3.4vw,52px)}
+#fpan0 .gate-out{margin-top:22px}
+#fpan0 .hero-cta{margin-top:26px}
+.find-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
+.find-row.two{grid-template-columns:1fr 1fr auto}
+.find-row .field{margin-bottom:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.find-row select,.find-row input{height:52px;padding:0 14px;background:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius);color:var(--text);width:100%;font-size:16px}
+.find-row select:focus,.find-row input:focus{border-color:var(--accent);outline:none}
+.find-row select:disabled{color:var(--dim);background:var(--ink-3);cursor:not-allowed}
+.find-row input::placeholder{color:var(--dim)}
+.find-row .btn{height:52px;min-height:52px;white-space:nowrap}
+.find-note{margin-top:16px;color:var(--dim);font-size:13px;line-height:1.55;max-width:70ch}
+@media(max-width:767px){
+  .find-tabs button{flex:1;padding:0 6px;font-size:13px}
+  .find-row,.find-row.two{grid-template-columns:1fr;gap:12px}
+  .find-row .btn{width:100%}
+}
+/* марка из вкладки «по бренду» — видимая и снимаемая, чтобы не уехала в заявку втихую */
+.qbrand{display:none;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;
+  border:1px solid var(--accent-dim);border-radius:var(--radius);background:rgba(5,124,188,.07)}
+.qbrand.on{display:flex}
+.qbrand span{color:var(--accent-lit);font-size:var(--fs-small);flex:1;min-width:0}
+.qbrand button{background:none;border:0;color:var(--dim);font-size:20px;cursor:pointer;
+  min-width:36px;min-height:36px}
+.qbrand button:hover{color:var(--text)}
+
 /* ============ REVEAL — rAF sweep, не IntersectionObserver ============ */
 [data-rv]{opacity:0;transform:translateY(16px);transition:opacity .48s ease-out,transform .48s cubic-bezier(.2,.7,.3,1)}
 [data-rv].in{opacity:1;transform:none}
@@ -590,6 +638,15 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     <h1>قل لنا المقاس. والباقي علينا.</h1>
     <p class="lead">جنوط وإطارات وإصلاح جنوط في شارع 36. اكتب الأرقام المدوّنة على جدار إطارك، وسيُرشَّح الكتالوج أدناه من تلقاء نفسه.</p>
 
+    <div class="find" id="find">
+    <div class="find-tabs" id="findTabs" role="tablist" aria-label="طريقة البحث">
+      <button type="button" role="tab" id="ftab0" aria-selected="true"  aria-controls="fpan0" data-t="0">حسب المقاس</button>
+      <button type="button" role="tab" id="ftab1" aria-selected="false" aria-controls="fpan1" data-t="1">حسب السيارة</button>
+      <button type="button" role="tab" id="ftab2" aria-selected="false" aria-controls="fpan2" data-t="2">حسب الماركة</button>
+    </div>
+
+    <div class="find-panels">
+    <div class="find-panel on" id="fpan0" role="tabpanel" aria-labelledby="ftab0">
     <div class="gate" role="group" aria-label="أدخل مقاس إطارك">
       <div class="gate-f">
         <label class="label" for="gW">العرض</label>
@@ -614,6 +671,43 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
       <a class="btn" href="#rims" id="gateGo">اعرض الجنوط المطابقة</a>
       <a class="btn btn-ghost" href="#calc">افتح حاسبة المقاسات</a>
     </div>
+    </div><!-- /fpan0 -->
+
+    <div class="find-panel" id="fpan1" role="tabpanel" aria-labelledby="ftab1">
+      <div class="find-row">
+        <div class="field">
+          <label class="label" for="fMake">الماركة</label>
+          <select id="fMake"><option value="">كل الماركات</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="fModel">الموديل</label>
+          <select id="fModel" disabled><option value="">كل الموديلات</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="fDia">القطر</label>
+          <select id="fDia" disabled><option value="">كل الأقطار</option></select>
+        </div>
+        <button class="btn" type="button" id="fGo">اعرض الجنوط المناسبة</button>
+      </div>
+      <p class="find-note">نطلب الجيل لا سنة الصنع: الموديلات أدناه تذكره أصلاً — Y61 وY62 وY63 ولاند كروزر 100 و200 و300. نمط البراغي وفتحة المركز واردان من المحل.</p>
+    </div><!-- /fpan1 -->
+
+    <div class="find-panel" id="fpan2" role="tabpanel" aria-labelledby="ftab2">
+      <div class="find-row two">
+        <div class="field">
+          <label class="label" for="fBrand">ماركة الإطار</label>
+          <input id="fBrand" type="text" placeholder="Michelin, Bridgestone, Dunlop" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="label" for="fBSize">المقاس، إن كنت تعرفه</label>
+          <input id="fBSize" type="text" inputmode="numeric" placeholder="2254518 → 225/45 R18" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn" type="button" id="fBGo">اسأل عن هذه الماركة</button>
+      </div>
+      <p class="find-note">لم ننشر قائمة الماركات بعد، لذلك هذه الخانة تسأل بدل أن تفلتر: اذكر الماركة ونؤكد لك المتوفر وسعره. يفتح طلبك جاهزاً — ما عليك إلا الإرسال.</p>
+    </div><!-- /fpan2 -->
+    </div><!-- /find-panels -->
+    </div><!-- /find -->
   </div>
 </section>
 
@@ -806,6 +900,10 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
         <p class="label" style="margin:22px 0 8px">أضف الخدمات</p>
         <div class="svc" id="svcBox"></div>
 
+        <div class="qbrand" id="qBrandRow">
+          <span id="qBrandTxt"></span>
+          <button type="button" id="qBrandX" aria-label="امسح الماركة">&times;</button>
+        </div>
         <div class="summary" id="qSummary"></div>
         <div class="calc-cta">
           <a class="btn" id="qWa" href="#" target="_blank" rel="noopener">أرسل عبر واتساب</a>
@@ -949,7 +1047,7 @@ var DATA = null;
 /* Словарь терминов каталога. В английской версии пустой — L() возвращает как есть.
    В /ar/ его подставляет build_ar.py: стиль диска, тип шины и названия услуг приходят
    из catalog.json по-английски, и переводить их надо на отрисовке, а не заменой строк. */
-var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Show fewer": "عرض أقل", "Show all {n} rims": "عرض كل الجنوط ({n})", "Show all {n} sizes": "عرض كل المقاسات ({n})", "— model to confirm": "— الموديل قيد التأكيد", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
+var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Any diameter": "كل الأقطار", "Brand": "الماركة", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Show fewer": "عرض أقل", "Show all {n} rims": "عرض كل الجنوط ({n})", "Show all {n} sizes": "عرض كل المقاسات ({n})", "— model to confirm": "— الموديل قيد التأكيد", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
 function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] : s; }
 /* Шаблон, а не склейка слов: в арабском существительное идёт перед определением,
    «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
@@ -1193,6 +1291,88 @@ function applyVehicle(){
   renderRims();
 }
 
+/* ---------- 3b. ПОИСК В ШАПКЕ: три входа ----------
+   Вкладка «по машине» не держит своего состояния: она переносит выбор в
+   фильтр каталога и прокручивает к нему. Два источника правды о выбранной
+   машине разошлись бы на первом же сбросе. */
+var findTabs = document.getElementById("findTabs"),
+    fMake = document.getElementById("fMake"), fModel = document.getElementById("fModel"),
+    fDia  = document.getElementById("fDia");
+
+function setFindTab(i){
+  var tabs = findTabs.querySelectorAll("button");
+  for(var k=0;k<tabs.length;k++){
+    var on = +tabs[k].getAttribute("data-t") === i;
+    tabs[k].setAttribute("aria-selected", on ? "true" : "false");
+    document.getElementById("fpan"+k).classList.toggle("on", on);
+  }
+}
+findTabs.addEventListener("click", function(e){
+  var b = e.target.closest("button[data-t]");
+  if(b) setFindTab(+b.getAttribute("data-t"));
+});
+
+function buildFind(){
+  fMake.innerHTML = pMake.innerHTML;           /* тот же список марок, что в каталоге */
+}
+function fillFindModels(){
+  fModel.innerHTML = '<option value="">'+L("Any model")+'</option>'
+    + DATA.vehicles.filter(function(v){ return v.make === fMake.value; })
+        .map(function(v){ return '<option value="'+v.id+'">'+L(v.model)+'</option>'; }).join("");
+  fModel.disabled = !fMake.value;
+  fillFindDia();
+}
+function fillFindDia(){
+  var id = fModel.value, ds = [];
+  if(id) DATA.rims.forEach(function(r){
+    if(r.fits.indexOf(id) > -1 && ds.indexOf(r.d) === -1) ds.push(r.d);
+  });
+  ds.sort(function(a,b){ return a-b; });
+  fDia.innerHTML = '<option value="">'+L("Any diameter")+'</option>'
+    + ds.map(function(d){ return '<option value="'+d+'">'+d+'&Prime;</option>'; }).join("");
+  fDia.disabled = !ds.length;
+}
+fMake.addEventListener("change", fillFindModels);
+fModel.addEventListener("change", fillFindDia);
+
+document.getElementById("fGo").addEventListener("click", function(){
+  pMake.value = fMake.value; fillModels();
+  pModel.value = fModel.value || ""; applyVehicle();
+  if(fDia.value){
+    rimFilter = "d" + fDia.value;
+    var chips = document.querySelectorAll("#rimFilters .chip");
+    for(var i=0;i<chips.length;i++)
+      chips[i].setAttribute("aria-pressed", chips[i].dataset.f === rimFilter ? "true" : "false");
+    renderRims();
+  }
+  document.getElementById("rims").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+});
+
+/* ---------- 3c. вкладка «по марке»: запрос, а не фильтр ----------
+   Марок шин у нас нет, выдумывать склад нельзя. Поэтому вкладка собирает
+   заявку и показывает марку отдельной снимаемой строкой. */
+var askBrand = "";
+var qBrandRow = document.getElementById("qBrandRow"), qBrandTxt = document.getElementById("qBrandTxt");
+function setBrand(b){
+  askBrand = b || "";
+  qBrandRow.classList.toggle("on", !!askBrand);
+  qBrandTxt.textContent = L("Brand") + ": " + askBrand;
+  quote();
+}
+document.getElementById("qBrandX").addEventListener("click", function(){ setBrand(""); });
+
+var fBrand = document.getElementById("fBrand"), fBSize = document.getElementById("fBSize");
+attachMask(fBSize);
+document.getElementById("fBGo").addEventListener("click", function(){
+  var b = fBrand.value.trim();
+  if(!b){ fBrand.focus(); return; }
+  qItem.selectedIndex = 0;                     /* 0 — шины, независимо от языка */
+  if(fBSize.value.trim()) qSize.value = fBSize.value.trim();
+  setBrand(b);
+  document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+  if(typeof setCalcTab === "function") setCalcTab(1);
+});
+
 pMake.addEventListener("change", function(){ fillModels(); applyVehicle(); });
 pModel.addEventListener("change", applyVehicle);
 document.getElementById("pReset").addEventListener("click", function(){
@@ -1355,6 +1535,7 @@ function quoteText(){
   L.push("مرحباً ويل زون، أرغب بمعرفة السعر.");
   L.push("");
   L.push("المطلوب: " + qItem.value);
+  if(askBrand) L.push("الماركة: " + askBrand);
   if(qSize.value.trim()) L.push("المقاس: " + qSize.value.trim());
   L.push("الكمية: " + qty + (qty === 4 ? " (طقم كامل)" : ""));
   if(picked.length) L.push("الخدمات المطلوبة: " + picked.join("، "));
@@ -1464,7 +1645,7 @@ if(!RM && !matchMedia("(hover: none)").matches){
 /* ---------- 8. старт ---------- */
 fetch("../catalog.json?v=2")
   .then(function(r){ return r.json(); })
-  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
+  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildFind(); fillFindModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
   .catch(function(){
     rimGrid.innerHTML = '<p class="empty">تعذّر تحميل الكتالوج. اتصل على ' + PHONE_H + ' وسنتحدث في الأمر.</p>';
     tyreGrid.innerHTML = '<p class="empty">تعذّر تحميل الكتالوج. اتصل على ' + PHONE_H + '.</p>';

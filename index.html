@@ -170,6 +170,54 @@ section{padding-block:clamp(52px,9vw,136px)}
 @media(max-width:1023px){.hero-wheel{display:none}.hero-photo::after{background:linear-gradient(180deg,rgba(11,14,18,.86),rgba(11,14,18,.95))}}
 @media(max-width:479px){.gate input{width:3.4ch}.gate{gap:4px}}
 
+/* ============ ПОИСК В ШАПКЕ: три входа ============
+   By size и By vehicle ищут по нашим данным. By brand данных не имеет —
+   марок шин клиент не присылал, поэтому вкладка собирает ЗАПРОС, а не фильтр. */
+.find{margin-top:clamp(22px,3vw,36px);max-width:900px}
+.find-tabs{display:flex;gap:4px}
+.find-tabs button{flex:0 0 auto;min-height:46px;padding:0 20px;cursor:pointer;
+  border:1px solid var(--line);border-bottom:0;border-radius:var(--radius) var(--radius) 0 0;
+  background:rgba(11,14,18,.72);color:var(--muted);font-weight:700;font-size:14px;
+  transition:background .15s,color .15s}
+.find-tabs button:hover{color:var(--text)}
+.find-tabs button[aria-selected="true"]{background:var(--ink-2);color:var(--text);
+  box-shadow:inset 0 2px 0 var(--accent)}
+.find-panel{background:var(--ink-2);border:1px solid var(--line);
+  border-radius:0 var(--radius) var(--radius) var(--radius);padding:clamp(18px,2.4vw,28px)}
+/* ворота размера рисовались свободно на фото; в панели 900px кегль 200px
+   не помещается — «18» вылезало за правый край вместе с подчёркиванием */
+.find-panels{display:grid;align-items:start}
+.find-panels > .find-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .16s}
+.find-panels > .find-panel.on{visibility:visible;opacity:1}
+@media(prefers-reduced-motion:reduce){.find-panels > .find-panel{transition:none}}
+#fpan0{--fs-mega:clamp(50px,8.4vw,124px)}
+#fpan0 .gate .sep{font-size:clamp(24px,3.4vw,52px)}
+#fpan0 .gate-out{margin-top:22px}
+#fpan0 .hero-cta{margin-top:26px}
+.find-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end}
+.find-row.two{grid-template-columns:1fr 1fr auto}
+.find-row .field{margin-bottom:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.find-row select,.find-row input{height:52px;padding:0 14px;background:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius);color:var(--text);width:100%;font-size:16px}
+.find-row select:focus,.find-row input:focus{border-color:var(--accent);outline:none}
+.find-row select:disabled{color:var(--dim);background:var(--ink-3);cursor:not-allowed}
+.find-row input::placeholder{color:var(--dim)}
+.find-row .btn{height:52px;min-height:52px;white-space:nowrap}
+.find-note{margin-top:16px;color:var(--dim);font-size:13px;line-height:1.55;max-width:70ch}
+@media(max-width:767px){
+  .find-tabs button{flex:1;padding:0 6px;font-size:13px}
+  .find-row,.find-row.two{grid-template-columns:1fr;gap:12px}
+  .find-row .btn{width:100%}
+}
+/* марка из вкладки «по бренду» — видимая и снимаемая, чтобы не уехала в заявку втихую */
+.qbrand{display:none;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;
+  border:1px solid var(--accent-dim);border-radius:var(--radius);background:rgba(5,124,188,.07)}
+.qbrand.on{display:flex}
+.qbrand span{color:var(--accent-lit);font-size:var(--fs-small);flex:1;min-width:0}
+.qbrand button{background:none;border:0;color:var(--dim);font-size:20px;cursor:pointer;
+  min-width:36px;min-height:36px}
+.qbrand button:hover{color:var(--text)}
+
 /* ============ REVEAL — rAF sweep, не IntersectionObserver ============ */
 [data-rv]{opacity:0;transform:translateY(16px);transition:opacity .48s ease-out,transform .48s cubic-bezier(.2,.7,.3,1)}
 [data-rv].in{opacity:1;transform:none}
@@ -561,6 +609,15 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
     <h1>Tell us your size. The rest is our job.</h1>
     <p class="lead">Rims, tyres and rim repair on 36th Street. Type the numbers off your tyre wall and the catalogue below filters itself.</p>
 
+    <div class="find" id="find">
+    <div class="find-tabs" id="findTabs" role="tablist" aria-label="How to search">
+      <button type="button" role="tab" id="ftab0" aria-selected="true"  aria-controls="fpan0" data-t="0">By size</button>
+      <button type="button" role="tab" id="ftab1" aria-selected="false" aria-controls="fpan1" data-t="1">By vehicle</button>
+      <button type="button" role="tab" id="ftab2" aria-selected="false" aria-controls="fpan2" data-t="2">By brand</button>
+    </div>
+
+    <div class="find-panels">
+    <div class="find-panel on" id="fpan0" role="tabpanel" aria-labelledby="ftab0">
     <div class="gate" role="group" aria-label="Enter your tyre size">
       <div class="gate-f">
         <label class="label" for="gW">Width</label>
@@ -585,6 +642,43 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
       <a class="btn" href="#rims" id="gateGo">See matching rims</a>
       <a class="btn btn-ghost" href="#calc">Open the size calculator</a>
     </div>
+    </div><!-- /fpan0 -->
+
+    <div class="find-panel" id="fpan1" role="tabpanel" aria-labelledby="ftab1">
+      <div class="find-row">
+        <div class="field">
+          <label class="label" for="fMake">Make</label>
+          <select id="fMake"><option value="">Any make</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="fModel">Model</label>
+          <select id="fModel" disabled><option value="">Any model</option></select>
+        </div>
+        <div class="field">
+          <label class="label" for="fDia">Diameter</label>
+          <select id="fDia" disabled><option value="">Any diameter</option></select>
+        </div>
+        <button class="btn" type="button" id="fGo">Show rims that fit</button>
+      </div>
+      <p class="find-note">We ask for the generation, not the year: the models below already name it &mdash; Y61, Y62, Y63, Land Cruiser 100, 200, 300. Bolt pattern and centre bore come from the shop.</p>
+    </div><!-- /fpan1 -->
+
+    <div class="find-panel" id="fpan2" role="tabpanel" aria-labelledby="ftab2">
+      <div class="find-row two">
+        <div class="field">
+          <label class="label" for="fBrand">Tyre brand</label>
+          <input id="fBrand" type="text" placeholder="Michelin, Bridgestone, Dunlop" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="label" for="fBSize">Size, if you know it</label>
+          <input id="fBSize" type="text" inputmode="numeric" placeholder="2254518 → 225/45 R18" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn" type="button" id="fBGo">Ask about this brand</button>
+      </div>
+      <p class="find-note">We have not published a brand list yet, so this one asks instead of filtering: name the brand and we confirm what is on the shelf and what it costs. Your request opens filled in &mdash; you only press send.</p>
+    </div><!-- /fpan2 -->
+    </div><!-- /find-panels -->
+    </div><!-- /find -->
   </div>
 </section>
 
@@ -777,6 +871,10 @@ html{-webkit-tap-highlight-color:rgba(5,124,188,.22)}
         <p class="label" style="margin:22px 0 8px">Add the work</p>
         <div class="svc" id="svcBox"></div>
 
+        <div class="qbrand" id="qBrandRow">
+          <span id="qBrandTxt"></span>
+          <button type="button" id="qBrandX" aria-label="Clear the brand">&times;</button>
+        </div>
         <div class="summary" id="qSummary"></div>
         <div class="calc-cta">
           <a class="btn" id="qWa" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
@@ -1164,6 +1262,88 @@ function applyVehicle(){
   renderRims();
 }
 
+/* ---------- 3b. ПОИСК В ШАПКЕ: три входа ----------
+   Вкладка «по машине» не держит своего состояния: она переносит выбор в
+   фильтр каталога и прокручивает к нему. Два источника правды о выбранной
+   машине разошлись бы на первом же сбросе. */
+var findTabs = document.getElementById("findTabs"),
+    fMake = document.getElementById("fMake"), fModel = document.getElementById("fModel"),
+    fDia  = document.getElementById("fDia");
+
+function setFindTab(i){
+  var tabs = findTabs.querySelectorAll("button");
+  for(var k=0;k<tabs.length;k++){
+    var on = +tabs[k].getAttribute("data-t") === i;
+    tabs[k].setAttribute("aria-selected", on ? "true" : "false");
+    document.getElementById("fpan"+k).classList.toggle("on", on);
+  }
+}
+findTabs.addEventListener("click", function(e){
+  var b = e.target.closest("button[data-t]");
+  if(b) setFindTab(+b.getAttribute("data-t"));
+});
+
+function buildFind(){
+  fMake.innerHTML = pMake.innerHTML;           /* тот же список марок, что в каталоге */
+}
+function fillFindModels(){
+  fModel.innerHTML = '<option value="">'+L("Any model")+'</option>'
+    + DATA.vehicles.filter(function(v){ return v.make === fMake.value; })
+        .map(function(v){ return '<option value="'+v.id+'">'+L(v.model)+'</option>'; }).join("");
+  fModel.disabled = !fMake.value;
+  fillFindDia();
+}
+function fillFindDia(){
+  var id = fModel.value, ds = [];
+  if(id) DATA.rims.forEach(function(r){
+    if(r.fits.indexOf(id) > -1 && ds.indexOf(r.d) === -1) ds.push(r.d);
+  });
+  ds.sort(function(a,b){ return a-b; });
+  fDia.innerHTML = '<option value="">'+L("Any diameter")+'</option>'
+    + ds.map(function(d){ return '<option value="'+d+'">'+d+'&Prime;</option>'; }).join("");
+  fDia.disabled = !ds.length;
+}
+fMake.addEventListener("change", fillFindModels);
+fModel.addEventListener("change", fillFindDia);
+
+document.getElementById("fGo").addEventListener("click", function(){
+  pMake.value = fMake.value; fillModels();
+  pModel.value = fModel.value || ""; applyVehicle();
+  if(fDia.value){
+    rimFilter = "d" + fDia.value;
+    var chips = document.querySelectorAll("#rimFilters .chip");
+    for(var i=0;i<chips.length;i++)
+      chips[i].setAttribute("aria-pressed", chips[i].dataset.f === rimFilter ? "true" : "false");
+    renderRims();
+  }
+  document.getElementById("rims").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+});
+
+/* ---------- 3c. вкладка «по марке»: запрос, а не фильтр ----------
+   Марок шин у нас нет, выдумывать склад нельзя. Поэтому вкладка собирает
+   заявку и показывает марку отдельной снимаемой строкой. */
+var askBrand = "";
+var qBrandRow = document.getElementById("qBrandRow"), qBrandTxt = document.getElementById("qBrandTxt");
+function setBrand(b){
+  askBrand = b || "";
+  qBrandRow.classList.toggle("on", !!askBrand);
+  qBrandTxt.textContent = L("Brand") + ": " + askBrand;
+  quote();
+}
+document.getElementById("qBrandX").addEventListener("click", function(){ setBrand(""); });
+
+var fBrand = document.getElementById("fBrand"), fBSize = document.getElementById("fBSize");
+attachMask(fBSize);
+document.getElementById("fBGo").addEventListener("click", function(){
+  var b = fBrand.value.trim();
+  if(!b){ fBrand.focus(); return; }
+  qItem.selectedIndex = 0;                     /* 0 — шины, независимо от языка */
+  if(fBSize.value.trim()) qSize.value = fBSize.value.trim();
+  setBrand(b);
+  document.getElementById("calc").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+  if(typeof setCalcTab === "function") setCalcTab(1);
+});
+
 pMake.addEventListener("change", function(){ fillModels(); applyVehicle(); });
 pModel.addEventListener("change", applyVehicle);
 document.getElementById("pReset").addEventListener("click", function(){
@@ -1326,6 +1506,7 @@ function quoteText(){
   L.push("Hello Wheel Zone, I would like a price.");
   L.push("");
   L.push("Item: " + qItem.value);
+  if(askBrand) L.push("Brand: " + askBrand);
   if(qSize.value.trim()) L.push("Size: " + qSize.value.trim());
   L.push("Quantity: " + qty + (qty === 4 ? " (full set)" : ""));
   if(picked.length) L.push("Work needed: " + picked.join(", "));
@@ -1435,7 +1616,7 @@ if(!RM && !matchMedia("(hover: none)").matches){
 /* ---------- 8. старт ---------- */
 fetch("catalog.json?v=2")
   .then(function(r){ return r.json(); })
-  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
+  .then(function(j){ DATA = j; buildPicker(); fillModels(); buildFind(); fillFindModels(); buildSvc(); renderRims(); renderTyres(); setQty(1); sweep(true); })
   .catch(function(){
     rimGrid.innerHTML = '<p class="empty">Catalogue could not be loaded. Call ' + PHONE_H + ' and we will talk it through.</p>';
     tyreGrid.innerHTML = '<p class="empty">Catalogue could not be loaded. Call ' + PHONE_H + '.</p>';
