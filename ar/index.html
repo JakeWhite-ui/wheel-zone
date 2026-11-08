@@ -169,6 +169,64 @@ section{padding-block:clamp(52px,9vw,136px)}
   border-radius:0 var(--radius) var(--radius) var(--radius);padding:clamp(18px,2.4vw,28px)}
 /* ворота размера рисовались свободно на фото; в панели 900px кегль 200px
    не помещается — «18» вылезало за правый край вместе с подчёркиванием */
+/* ---- поле размера: кнопка, открывающая сетку ---- */
+.sizebtn{height:52px;width:100%;padding:0 38px 0 14px;text-align:start;cursor:pointer;
+  background:var(--ink);border:1px solid var(--line);border-radius:var(--radius);
+  color:var(--dim);font-size:16px;font-family:"JetBrains Mono",monospace;position:relative;
+  transition:border-color .15s,color .15s}
+.sizebtn::after{content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:translateY(-70%) rotate(45deg)}
+.sizebtn:hover:not(:disabled){border-color:var(--line-lit);color:var(--text)}
+.sizebtn.filled{color:var(--text);border-color:var(--accent)}
+.sizebtn:disabled{opacity:.45;cursor:not-allowed}
+[dir="rtl"] .sizebtn{padding:0 14px 0 38px}
+[dir="rtl"] .sizebtn::after{right:auto;left:14px}
+
+/* ---- модалка выбора размера ---- */
+.szmodal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-start;
+  justify-content:center;background:rgba(6,8,11,.86);overflow-y:auto;
+  padding:clamp(16px,4vh,56px) var(--pad) calc(32px + env(safe-area-inset-bottom,0px));
+  padding-top:calc(clamp(16px,4vh,56px) + env(safe-area-inset-top,0px))}
+.szmodal-in{position:relative;width:100%;max-width:820px;background:var(--ink-2);
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:clamp(22px,3vw,34px);box-shadow:var(--sh-panel)}
+.szclose{position:absolute;top:10px;right:10px;width:44px;height:44px;cursor:pointer;
+  background:none;border:0;color:var(--muted);font-size:26px;line-height:1;border-radius:var(--radius)}
+.szclose:hover{color:var(--text);background:var(--ink-3)}
+[dir="rtl"] .szclose{right:auto;left:10px}
+.szmodal h2{font-size:clamp(20px,2.4vw,27px);margin-bottom:18px;padding-right:44px}
+[dir="rtl"] .szmodal h2{padding:0 0 0 44px}
+.szsearch input{width:100%;height:52px;padding:0 14px;background:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius);color:var(--text);font-size:16px}
+.szsearch input:focus{border-color:var(--accent);outline:none}
+.szsteps{display:flex;align-items:center;gap:10px;margin:22px 0 6px}
+.szsteps button{flex:0 0 auto;display:flex;flex-direction:column;gap:4px;cursor:pointer;
+  background:none;border:0;padding:4px 2px;text-align:start;color:var(--dim)}
+.szsteps button b{font-size:var(--fs-label);text-transform:uppercase;letter-spacing:.14em;
+  font-family:"JetBrains Mono",monospace;font-weight:700}
+.szsteps button em{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:18px;color:var(--muted)}
+.szsteps button[aria-selected="true"]{color:var(--accent-lit)}
+.szsteps button[aria-selected="true"] em{color:var(--text)}
+.szsteps button:disabled{opacity:.4;cursor:not-allowed}
+/* пунктир между шагами — он же показывает, докуда дошли */
+.szrule{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 4px,transparent 4px 10px)}
+.szhint{color:var(--dim);font-size:13px;line-height:1.5;margin-bottom:16px;min-height:20px}
+.szgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.szgrid button{min-height:52px;cursor:pointer;background:var(--ink);border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--text);font-family:"JetBrains Mono",monospace;
+  font-size:16px;transition:border-color .12s,background .12s}
+.szgrid button:hover{border-color:var(--accent);background:var(--ink-3)}
+.szgrid button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-dim);color:var(--accent-lit)}
+@media(max-width:767px){
+  .szmodal{padding-inline:12px}
+  .szmodal-in{padding:20px 16px 24px}
+  .szgrid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .szsteps{gap:6px}
+  .szsteps button em{font-size:16px}
+}
+@media(max-width:380px){.szgrid{grid-template-columns:repeat(2,1fr)}}
+
 /* ряд полей растёт по содержимому, кнопка прижата вправо — как в референсе */
 .find-row .field .label{margin-bottom:0}
 .find-panels{display:grid;align-items:start}
@@ -631,16 +689,19 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
     <div class="find-panel on" id="fpan0" role="tabpanel" aria-labelledby="ftab0">
     <div class="find-row" role="group" aria-label="اختر مقاس إطارك">
       <div class="field">
-        <label class="label" for="gW">العرض</label>
-        <select id="gW" aria-describedby="gateOut"><option value="">اختر العرض</option><option value="135">135</option><option value="145">145</option><option value="155">155</option><option value="165">165</option><option value="175">175</option><option value="185">185</option><option value="195">195</option><option value="205">205</option><option value="215">215</option><option value="225">225</option><option value="235">235</option><option value="245">245</option><option value="255">255</option><option value="265">265</option><option value="275">275</option><option value="285">285</option><option value="295">295</option><option value="305">305</option><option value="315">315</option><option value="325">325</option><option value="335">335</option><option value="345">345</option><option value="355">355</option></select>
+        <span class="label" id="lbW">العرض</span>
+        <button type="button" class="sizebtn" id="bW" data-step="0" aria-labelledby="lbW bW" aria-haspopup="dialog">العرض</button>
+        <input type="hidden" id="gW">
       </div>
       <div class="field">
-        <label class="label" for="gP">النسبة</label>
-        <select id="gP" disabled><option value="">اختر النسبة</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option><option value="60">60</option><option value="65">65</option><option value="70">70</option><option value="75">75</option><option value="80">80</option><option value="85">85</option></select>
+        <span class="label" id="lbP">النسبة</span>
+        <button type="button" class="sizebtn" id="bP" data-step="1" aria-labelledby="lbP bP" aria-haspopup="dialog" disabled>النسبة</button>
+        <input type="hidden" id="gP">
       </div>
       <div class="field">
-        <label class="label" for="gR">قطر الجنط</label>
-        <select id="gR" disabled><option value="">اختر القطر</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
+        <span class="label" id="lbR">قطر الجنط</span>
+        <button type="button" class="sizebtn" id="bR" data-step="2" aria-labelledby="lbR bR" aria-haspopup="dialog" disabled>قطر الجنط</button>
+        <input type="hidden" id="gR">
       </div>
       <a class="btn" href="#rims" id="gateGo">ابحث عن الإطارات</a>
     </div>
@@ -985,6 +1046,27 @@ h1,h2,h3{font-variation-settings:normal;letter-spacing:0;line-height:1.18}
   <button type="button" class="x" id="instNo" aria-label="ليس الآن">&times;</button>
 </div>
 
+<!-- ============ ВЫБОР РАЗМЕРА: модалка ============ -->
+<div class="szmodal" id="szModal" role="dialog" aria-modal="true" aria-labelledby="szTitle" hidden>
+  <div class="szmodal-in" role="document">
+    <button type="button" class="szclose" id="szClose" aria-label="إغلاق">&times;</button>
+    <h2 id="szTitle">مقاسك</h2>
+    <div class="szsearch">
+      <input id="szSearch" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"
+             placeholder="تعرفه أصلاً؟ اكتب 2254518 أو 225/45 R18">
+    </div>
+    <div class="szsteps" id="szSteps" role="tablist" aria-label="خطوات المقاس">
+      <button type="button" role="tab" data-s="0"><b>العرض</b><em id="szvW">&mdash;</em></button>
+      <span class="szrule" aria-hidden="true"></span>
+      <button type="button" role="tab" data-s="1"><b>النسبة</b><em id="szvP">&mdash;</em></button>
+      <span class="szrule" aria-hidden="true"></span>
+      <button type="button" role="tab" data-s="2"><b>قطر الجنط</b><em id="szvR">&mdash;</em></button>
+    </div>
+    <p class="szhint" id="szHint"></p>
+    <div class="szgrid" id="szGrid"></div>
+  </div>
+</div>
+
 <nav class="mbar" aria-label="تواصل سريع">
   <div class="mbar-in">
     <a href="#rims"  data-spy="rims"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3v6.4M12 14.6V21M3 12h6.4M14.6 12H21"/></svg><span>الجنوط</span></a>
@@ -1027,7 +1109,7 @@ var DATA = null;
 /* Словарь терминов каталога. В английской версии пустой — L() возвращает как есть.
    В /ar/ его подставляет build_ar.py: стиль диска, тип шины и названия услуг приходят
    из catalog.json по-английски, и переводить их надо на отрисовке, а не заменой строк. */
-var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Any diameter": "كل الأقطار", "Brand": "الماركة", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Show fewer": "عرض أقل", "Show all {n} rims": "عرض كل الجنوط ({n})", "Show all {n} sizes": "عرض كل المقاسات ({n})", "— model to confirm": "— الموديل قيد التأكيد", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
+var TERMS = {"width": "العرض", "et": "الإزاحة", "cb": "فتحة المركز", "rim": "جنط", "same rim": "نفس الجنط", "overall": "القطر الكلي", "Fits": "يناسب", "to confirm": "يُحدَّد لاحقاً", "width & offset to confirm": "العرض والإزاحة يُحدَّدان لاحقاً", "Find by vehicle": "ابحث حسب السيارة", "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.": "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط.", "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين", "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل", "Any diameter": "كل الأقطار", "Brand": "الماركة", "Width": "العرض", "Profile": "النسبة", "Rim": "قطر الجنط", "The first number on the tyre wall. 30X—37X are the 4×4 sizes written in inches.": "أول رقم على جدار الإطار. مقاسات 30X—37X هي مقاسات الدفع الرباعي بالبوصة.", "Inches across the tread — the second number.": "عرض المداس بالبوصة — الرقم الثاني.", "The second number — the sidewall as a percent of the width.": "الرقم الثاني — ارتفاع الجدار كنسبة من العرض.", "The number after the R — the rim it sits on.": "الرقم بعد حرف R — قطر الجنط.", "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز", "Diameters we list": "المقاسات المتوفرة لدينا", "Show fewer": "عرض أقل", "Show all {n} rims": "عرض كل الجنوط ({n})", "Show all {n} sizes": "عرض كل المقاسات ({n})", "— model to confirm": "— الموديل قيد التأكيد", "Nothing listed for that combination yet. Call ": "لا يوجد في القائمة ما يطابق هذا الاختيار بعد. اتصل على ", " — the list on this page is only what we have confirmed so far.": " — القائمة هنا تضم ما تأكّد لدينا حتى الآن فقط.", "{d}&Prime; rim, {pcd}, fits {fits}": "جنط مقاس {d}&Prime;، {pcd}، يناسب {fits}", "{d}&Prime; rim, {pcd}, CB {cb} — {fits}": "جنط مقاس {d}&Prime;، {pcd}، فتحة المركز {cb} — {fits}", "Passenger": "ركاب", "SUV": "دفع رباعي", "Performance": "أداء عالٍ", "4x4": "طرق وعرة", "load": "الحمل", "mm": "ملم", "kg": "كجم", "km/h": "كم/س", "AED": "درهم", "Price on request": "السعر عند الطلب", "Ask us": "اسألنا", "Tyre fitting": "تركيب الإطارات", "Wheel balancing": "ترصيص العجلات", "Wheel alignment": "ضبط زوايا العجلات", "Puncture repair": "تصليح البنشر", "Nitrogen inflation": "تعبئة نيتروجين", "New valves": "صمامات جديدة", "Old tyre disposal": "التخلص من الإطارات القديمة", "Rim repair": "إصلاح الجنوط"};
 function L(s){ return Object.prototype.hasOwnProperty.call(TERMS, s) ? TERMS[s] : s; }
 /* Шаблон, а не склейка слов: в арабском существительное идёт перед определением,
    «Split-spoke rim» = «جنط قضبان مزدوجة», и порядок задаётся переводом строки целиком. */
@@ -1110,14 +1192,39 @@ function gateCascade(){
   gP.disabled = !gW.value;
   gR.disabled = !gP.value;
 }
+/* Внедорожный размер пишется иначе — 33X12.50R15, и первое число это уже
+   ВНЕШНИЙ ДИАМЕТР В ДЮЙМАХ, а не ширина. Поэтому у него своя ветка: габарит
+   считается умножением на 25,4, а в плюс-сайзинг он не идёт — там метрические
+   таблицы, и подменять их было бы враньём. */
+function flotation(){ return /^\d{2}X$/.test(gW.value); }
+function sizeString(){
+  if(flotation()) return gW.value + gP.value + " R" + gR.value;
+  return gW.value + "/" + gP.value + " R" + gR.value;
+}
+var bW=document.getElementById("bW"), bP=document.getElementById("bP"), bR=document.getElementById("bR");
+function paintButtons(){
+  [[bW,gW,"Width"],[bP,gP,"Profile"],[bR,gR,"Rim"]].forEach(function(t){
+    var btn=t[0], inp=t[1];
+    btn.textContent = inp.value || L(t[2]);
+    btn.classList.toggle("filled", !!inp.value);
+    btn.disabled = inp.disabled;
+  });
+}
 function gateSync(){
   gateCascade();
-  [gW,gP,gR].forEach(function(el){ el.classList.toggle("filled", el.value.length>0); });
-  var g = gateRead(), bits = [];
-  if(g.w && (g.w<135 || g.w>355)) bits.push('<span class="hint">العرض عادةً بين 135 و 355.</span>');
+  paintButtons();
+  var g = gateRead(), bits = [], flo = flotation();
+  if(!flo && g.w && (g.w<135 || g.w>385)) bits.push('<span class="hint">العرض عادةً بين 135 و 385.</span>');
   if(g.r && (g.r<13 || g.r>24))  bits.push('<span class="hint">قطر الجنط عادةً بين 13 و 24.</span>');
   if(!bits.length){
-    if(g.w && g.p && g.r){
+    if(flo && gP.value && gR.value){
+      var inch = parseInt(gW.value, 10);
+      bits.push('<span class="pill">'+sizeString()+'</span>');
+      bits.push('<span class="pill">'+L("overall")+' '+(inch*25.4).toFixed(1)+' '+L("mm")+'</span>');
+      bits.push('<span class="hint">رُشِّح الكتالوج على '+g.r+'″.</span>');
+      document.getElementById("qSize").value = sizeString();
+      quote();
+    } else if(g.w && g.p && g.r){
       var o={w:g.w,p:g.p,r:g.r};
       bits.push('<span class="pill">'+fmt(o)+'</span>');
       bits.push('<span class="pill">'+L("overall")+' '+overall(o)+' '+L("mm")+'</span>');
@@ -1134,16 +1241,104 @@ function gateSync(){
   gateOut.innerHTML = bits.join(" ");
   renderRims(); renderTyres();
 }
-[gW,gP,gR].forEach(function(el,i,arr){
-  el.addEventListener("change", function(){
-    gateSync();
-    /* открыть следующий список за человека нельзя — переводим на него фокус,
-       чтобы с клавиатуры шаг продолжался без мыши */
-    var next = arr[i+1];
-    if(el.value && next && !next.disabled && !next.value) next.focus();
-  });
+/* ---------- 3a. МОДАЛКА ВЫБОРА РАЗМЕРА ----------
+   Их сетка кнопок, наша палитра. Ширина, профиль и диаметр — три шага; выбрал
+   значение — шаг переключается сам, на третьем окно закрывается. Строку размера
+   можно вбить целиком, если человек её знает. */
+var SZ = {
+  w: [135,145,155,165,175,185,195,205,215,225,235,245,255,265,275,285,295,305,315,325,335,355,385,
+      "30X","31X","33X","35X","37X"],
+  p: [25,30,35,40,45,50,55,60,65,70,75,80,85],
+  pFlo: ["9.50","10.50","11.50","12.50","13.50","14.50","15.50"],
+  r: [13,14,15,16,17,18,19,20,21,22,23,24],
+  rFlo: [15,16,17,18,20,22,24]
+};
+var szModal=document.getElementById("szModal"), szGrid=document.getElementById("szGrid"),
+    szSteps=document.getElementById("szSteps"), szHint=document.getElementById("szHint"),
+    szSearch=document.getElementById("szSearch");
+var szStep=0, szOpener=null;
+var SZ_IN=[gW,gP,gR], SZ_VAL=["szvW","szvP","szvR"];
+
+function szValues(step){
+  if(step===0) return SZ.w;
+  if(step===1) return flotation() ? SZ.pFlo : SZ.p;
+  return flotation() ? SZ.rFlo : SZ.r;
+}
+function szHintText(step){
+  if(step===0) return L("The first number on the tyre wall. 30X\u201437X are the 4\u00d74 sizes written in inches.");
+  if(step===1) return flotation() ? L("Inches across the tread \u2014 the second number.")
+                                  : L("The second number \u2014 the sidewall as a percent of the width.");
+  return L("The number after the R \u2014 the rim it sits on.");
+}
+function szPaint(){
+  var tabs = szSteps.querySelectorAll("button");
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].setAttribute("aria-selected", i===szStep ? "true" : "false");
+    tabs[i].disabled = i>0 && !SZ_IN[i-1].value;
+    document.getElementById(SZ_VAL[i]).textContent = SZ_IN[i].value || "\u2014";
+  }
+  szHint.textContent = szHintText(szStep);
+  var cur = SZ_IN[szStep].value;
+  szGrid.innerHTML = szValues(szStep).map(function(v){
+    return '<button type="button" data-v="'+v+'" aria-pressed="'+(String(v)===cur?"true":"false")+'">'+v+'</button>';
+  }).join("");
+}
+function szOpen(step, opener){
+  szOpener = opener || null;
+  szStep = step || 0;
+  szModal.hidden = false;
+  document.body.style.overflow = "hidden";
+  szPaint();
+  szSearch.value = "";
+  szSearch.focus();
+}
+function szClose(){
+  szModal.hidden = true;
+  document.body.style.overflow = "";
+  if(szOpener) szOpener.focus();
+}
+szGrid.addEventListener("click", function(e){
+  var b = e.target.closest("button[data-v]");
+  if(!b) return;
+  var v = b.getAttribute("data-v"), wasFlo = flotation();
+  SZ_IN[szStep].value = v;
+  /* сменил тип размера на первом шаге — то, что ниже, относится к другой системе */
+  if(szStep===0 && wasFlo !== /^\d{2}X$/.test(v)){ gP.value=""; gR.value=""; }
+  gateSync();
+  if(szStep < 2){ szStep++; szPaint(); }
+  else szClose();
 });
-gateCascade();
+szSteps.addEventListener("click", function(e){
+  var b = e.target.closest("button[data-s]");
+  if(b && !b.disabled){ szStep = +b.getAttribute("data-s"); szPaint(); }
+});
+document.getElementById("szClose").addEventListener("click", szClose);
+szModal.addEventListener("click", function(e){ if(e.target === szModal) szClose(); });
+addEventListener("keydown", function(e){ if(e.key === "Escape" && !szModal.hidden) szClose(); });
+
+/* Строка размера целиком: 2254518, 225/45 R18, 33X12.50R15.
+   Имя НЕ parseSize: так зовётся разборщик декодера ниже, и объявление функции
+   всплывает наверх области видимости — моя версия молча перекрыла бы его,
+   калькулятор перестал бы читать размер, а ошибки в консоли не было бы. */
+function szParse(s){
+  s = String(s).toUpperCase().replace(/\s+/g,"");
+  var m = /^(\d{2})X(\d{1,2}(?:\.\d{1,2})?)R?(\d{2})$/.exec(s);
+  if(m) return [m[1]+"X", m[2], m[3]];
+  m = /^(\d{3})[\/\-]?(\d{2})R?(\d{2})$/.exec(s);
+  if(m) return [m[1], m[2], m[3]];
+  return null;
+}
+szSearch.addEventListener("input", function(){
+  var hit = szParse(szSearch.value);
+  if(!hit) return;
+  gW.value=hit[0]; gP.value=hit[1]; gR.value=hit[2];
+  gateSync(); szClose();
+});
+
+[bW,bP,bR].forEach(function(btn){
+  btn.addEventListener("click", function(){ szOpen(+btn.getAttribute("data-step"), btn); });
+});
+gateCascade(); paintButtons();
 
 /* ---------- 4. каталог ---------- */
 var rimFilter="all", tyreFilter="all", pickVehicle="";

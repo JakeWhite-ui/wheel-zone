@@ -33,6 +33,15 @@ TERMS = {
   "Make": "الماركة", "Model": "الموديل", "Reset": "إعادة تعيين",
   "Any make": "كل الماركات", "Any model": "كل الموديلات", "All": "الكل",
   "Any diameter": "كل الأقطار", "Brand": "الماركة",
+  "Width": "العرض", "Profile": "النسبة", "Rim": "قطر الجنط",
+  "The first number on the tyre wall. 30X\u201437X are the 4\u00d74 sizes written in inches.":
+    "أول رقم على جدار الإطار. مقاسات 30X\u201437X هي مقاسات الدفع الرباعي بالبوصة.",
+  "Inches across the tread \u2014 the second number.":
+    "عرض المداس بالبوصة \u2014 الرقم الثاني.",
+  "The second number \u2014 the sidewall as a percent of the width.":
+    "الرقم الثاني \u2014 ارتفاع الجدار كنسبة من العرض.",
+  "The number after the R \u2014 the rim it sits on.":
+    "الرقم بعد حرف R \u2014 قطر الجنط.",
   "Bolt pattern": "نمط الصواميل", "Centre bore": "فتحة المركز",
   "Diameters we list": "المقاسات المتوفرة لدينا",
   # мобильная раскладка
@@ -175,6 +184,12 @@ T = [
  ("Pick your car and we show only the rims that bolt on.",
   "اختر سيارتك وسنعرض لك الجنوط التي تركّب عليها فقط."),
  # поиск в шапке: три входа
+ # модалка выбора размера
+ (">Your size<", ">مقاسك<"),
+ ('placeholder="Know it already? Type 2254518 or 225/45 R18"',
+  'placeholder="تعرفه أصلاً؟ اكتب 2254518 أو 225/45 R18"'),
+ ('aria-label="Size steps"', 'aria-label="خطوات المقاس"'),
+ ('aria-label="Close"', 'aria-label="إغلاق"'),
  (">By size<", ">حسب المقاس<"),
  (">By vehicle<", ">حسب السيارة<"),
  (">By brand<", ">حسب الماركة<"),
@@ -313,7 +328,7 @@ T = [
  ("No sizes under that filter yet.", "لا توجد مقاسات ضمن هذا الترشيح بعد."),
  ("Catalogue could not be loaded. Call ", "تعذّر تحميل الكتالوج. اتصل على "),
  (" and we will talk it through.", " وسنتحدث في الأمر."),
- ("Width is usually between 135 and 355.", "العرض عادةً بين 135 و 355."),
+ ("Width is usually between 135 and 385.", "العرض عادةً بين 135 و 385."),
  ("Rim diameter is usually between 13 and 24.", "قطر الجنط عادةً بين 13 و 24."),
  ("Catalogue filtered to ", "رُشِّح الكتالوج على "),
  ("Catalogue filtered.", "رُشِّح الكتالوج."),
