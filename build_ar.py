@@ -130,14 +130,14 @@ T = [
   "ويل زون لتجارة الاطارات — جنوط وإطارات وإصلاح جنوط في راس الخور، دبي"),
  ("Wheel Zone Tyre Trading — Rims, Tyres &amp; Rim Repair in Ras Al Khor, Dubai",
   "ويل زون لتجارة الاطارات — جنوط وإطارات وإصلاح جنوط في راس الخور، دبي"),
- ("Wheel Zone Tyre Trading (4X_WHEELS) — rims, tyres and rim repair on 36th Street, Ras Al Khor Industrial Area 2, Dubai. Rated 4.4 on Google. Call 04 576 2199.",
-  "ويل زون لتجارة الاطارات (4X_WHEELS) — جنوط وإطارات وإصلاح جنوط في شارع 36، منطقة راس الخور الصناعية 2، دبي. تقييم 4.4 على جوجل. اتصل 04 576 2199."),
+ ("Wheel Zone Tyre Trading (4X_WHEELS) — rims, tyres and rim repair on 36th Street, Ras Al Khor Industrial Area 2, Dubai. Rated 4.6 on Google. Call 04 576 2199.",
+  "ويل زون لتجارة الاطارات (4X_WHEELS) — جنوط وإطارات وإصلاح جنوط في شارع 36، منطقة راس الخور الصناعية 2، دبي. تقييم 4.6 على جوجل. اتصل 04 576 2199."),
  ("Wheel Zone Tyre Trading &mdash; Rims, Tyres &amp; Rim Repair, Dubai",
   "ويل زون لتجارة الاطارات — جنوط وإطارات وإصلاح جنوط، دبي"),
  ("Wheel Zone Tyre Trading — Rims, Tyres &amp; Rim Repair, Dubai",
   "ويل زون لتجارة الاطارات — جنوط وإطارات وإصلاح جنوط، دبي"),
- ("Rims, tyres and rim repair on 36th Street, Ras Al Khor Industrial Area 2, Dubai. Rated 4.4 on Google.",
-  "جنوط وإطارات وإصلاح جنوط في شارع 36، منطقة راس الخور الصناعية 2، دبي. تقييم 4.4 على جوجل."),
+ ("Rims, tyres and rim repair on 36th Street, Ras Al Khor Industrial Area 2, Dubai. Rated 4.6 on Google.",
+  "جنوط وإطارات وإصلاح جنوط في شارع 36، منطقة راس الخور الصناعية 2، دبي. تقييم 4.6 على جوجل."),
  ("Wheel Zone Tyre Trading logo", "شعار ويل زون لتجارة الاطارات"),
  ("Wheel Zone Tyre Trading &mdash; home", "ويل زون لتجارة الاطارات — الرئيسية"),
  ("Wheel Zone Tyre Trading — home", "ويل زون لتجارة الاطارات — الرئيسية"),
@@ -150,7 +150,7 @@ T = [
 
  # --- hero ---
  ("Ras Al Khor Industrial Area 2 · Dubai", "منطقة راس الخور الصناعية 2 · دبي"),
- ("4.4 ★ · 40 reviews on Google", "4.4 ★ · 40 تقييماً على جوجل"),
+ ("4.6 ★ · 63 reviews on Google", "4.6 ★ · 63 تقييماً على جوجل"),
  ("Tell us your size. The rest is our job.", "قل لنا المقاس. والباقي علينا."),
  ("Rims, tyres and rim repair on 36th Street. Pick the three numbers off your tyre wall and the catalogue below filters itself.",
   "جنوط وإطارات وإصلاح جنوط في شارع 36. اختر الأرقام الثلاثة المدوّنة على جدار إطارك، وسيُرشَّح الكتالوج أدناه من تلقاء نفسه."),
@@ -295,8 +295,8 @@ T = [
  # --- reviews ---
  ("06 — Out loud", "06 — بصوت عالٍ"),
  ("Three people, in their own&nbsp;words", "ثلاثة أشخاص، بكلماتهم هم"),
- ("Copied from our Google profile without a single edit. We have 40 of them and a 4.4 average — we would rather show you the real three than invent thirty.",
-  "منقولة من صفحتنا على جوجل دون تعديل حرف واحد. لدينا 40 تقييماً بمعدل 4.4 — ونفضّل أن نعرض عليك ثلاثة حقيقية بدل أن نختلق ثلاثين."),
+ ("Copied from our Google profile without a single edit. We have 63 of them and a 4.6 average — we would rather show you the real three than invent sixty.",
+  "منقولة من صفحتنا على جوجل دون تعديل حرف واحد. لدينا 63 تقييماً بمعدل 4.6 — ونفضّل أن نعرض عليك ثلاثة حقيقية بدل أن نختلق ستين."),
  ('aria-label="5 out of 5"', 'aria-label="5 من 5"'),
  ("Local Guide · 330 reviews · a year ago", "مرشد محلي · 330 تقييماً · قبل سنة"),
  ("8 reviews · a year ago", "8 تقييمات · قبل سنة"),
@@ -309,7 +309,7 @@ T = [
  ("drops you at the door.", "يوصلك إلى الباب مباشرة."),
  (">Address<", ">العنوان<"), (">Phone<", ">الهاتف<"), (">Plus code<", ">رمز Plus<"),
  (">Closing time<", ">وقت الإغلاق<"), (">Google<", ">جوجل<"), (">Arabic name<", ">الاسم بالعربية<"),
- ("4.4 ★ from 40 reviews", "4.4 ★ من 40 تقييماً"),
+ ("4.6 ★ from 63 reviews", "4.6 ★ من 63 تقييماً"),
  ("Wheel Zone Tyre Trading on the map", "ويل زون لتجارة الاطارات على الخريطة"),
 
  # --- footer / bar ---
