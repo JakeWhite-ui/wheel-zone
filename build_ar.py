@@ -13,8 +13,8 @@ html = html.replace('<html lang="en">', '<html lang="ar" dir="rtl">')
 html = html.replace(
   'family=Archivo:wdth,wght@75..125,400..900&family=JetBrains+Mono:wght@400;700',
   'family=Archivo:wdth,wght@75..125,400..900&family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700')
-html = html.replace('<link rel="canonical" href="https://tirez.ae/">',
-                    '<link rel="canonical" href="https://tirez.ae/ar/">')
+html = html.replace('<link rel="canonical" href="https://wheelzone.ae/">',
+                    '<link rel="canonical" href="https://wheelzone.ae/ar/">')
 html = html.replace('href="img/', 'href="../img/').replace('src="img/', 'src="../img/')
 html = html.replace('srcset="img/', 'srcset="../img/')
 assert 'srcset="../img/logo-mark' in html, "знак в шапке не перепривязан"
@@ -72,13 +72,18 @@ import json as _json
 _terms_js = "var TERMS = " + _json.dumps(TERMS, ensure_ascii=False) + ";"
 assert "var TERMS = window.WZ_TERMS || {};" in html, "крючок L() пропал из index.html"
 html = html.replace("var TERMS = window.WZ_TERMS || {};", _terms_js)
-html = html.replace('content="https://tirez.ae/img/', 'content="https://tirez.ae/img/')
+html = html.replace('content="https://wheelzone.ae/img/', 'content="https://wheelzone.ae/img/')
 html = html.replace('fetch("catalog.json?v=2")', 'fetch("../catalog.json?v=2")')
 # якорь без того, что идёт ПОСЛЕ ?v=1: любой новый атрибут у <img> ломал замену
 html = html.replace("""+r.img+'?v=1\"""", """+"../"+r.img+'?v=1\"""")
 assert '"../"+r.img' in html, "путь к картинкам каталога не переписан"
 html = html.replace('href="ar/"', 'href="../"')
-html = html.replace('"url":"https://tirez.ae/"', '"url":"https://tirez.ae/ar/"')
+html = html.replace('"url":"https://wheelzone.ae/"', '"url":"https://wheelzone.ae/ar/"')
+# og:url у арабской страницы должен указывать на неё саму, иначе шаринг из
+# арабской версии открывает английскую
+html = html.replace('<meta property="og:url" content="https://wheelzone.ae/">',
+                    '<meta property="og:url" content="https://wheelzone.ae/ar/">')
+assert 'og:url" content="https://wheelzone.ae/ar/"' in html, "og:url арабской версии не перепривязан"
 
 # ---------- 2. RTL + Cairo, поверх общих токенов ----------
 RTL_CSS = u"""
@@ -348,7 +353,7 @@ T = [
  ('" (full set)"', '" (طقم كامل)"'),
  ('L.push("Quantity: " + qty', 'L.push("الكمية: " + qty'),
  ('L.push("Work needed: " + picked.join(", "));', 'L.push("الخدمات المطلوبة: " + picked.join("، "));'),
- ('L.push("Sent from tirez.ae");', 'L.push("أُرسلت من tirez.ae");'),
+ ('L.push("Sent from wheelzone.ae");', 'L.push("أُرسلت من wheelzone.ae");'),
 ]
 
 for a, b in T:
